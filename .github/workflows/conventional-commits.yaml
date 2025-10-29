@@ -2,6 +2,7 @@ name: Validate Conventional Commits
 
 # Ref: https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax#filter-pattern-cheat-sheet
 on:
+  push:
   pull_request:
     types: [opened, synchronize, reopened]
   workflow_call:
@@ -62,7 +63,7 @@ jobs:
             echo "This is a regular commit"
           fi
 
-      - name: Validate Conventional Commits
+      - name: Validate conventional commits
         if: github.event_name == 'pull_request' || steps.check-merge.outputs.is_merge != 'true'
         id: conventional-commits
         uses: ./.github/actions/conventional-commits
