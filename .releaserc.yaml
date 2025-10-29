@@ -1,3 +1,5 @@
+# tagFormat: "v${version}"
+
 plugins:
   - "@semantic-release/commit-analyzer"
   - "@semantic-release/release-notes-generator"
@@ -11,5 +13,3 @@ branches:
     prerelease: '${name.replace(/^dev\//g, "dev-")}'
   - name: feature/*
     prerelease: '${name.replace(/^feature\//g, "feature-")}'
-  - name: hotfix/*
-    prerelease: '${name.replace(/^hotfix\//g, "hotfix-")}'

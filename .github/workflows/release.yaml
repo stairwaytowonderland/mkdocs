@@ -1,10 +1,8 @@
 name: Release
 
+# Ref: https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax#filter-pattern-cheat-sheet
 on:
-  push:
-    branches:
-      - main
-  workflow_dispatch:
+  workflow_call:
 
 # permissions:
 #   contents: write
@@ -25,24 +23,10 @@ jobs:
           fetch-depth: 0
           persist-credentials: false
 
-      - name: Semantic Release
-        uses: go-semantic-release/action@v1
-        id: semantic-release
+      - name: Run semantic release
+        uses: ./.github/actions/semantic-release
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           allow-initial-development-versions: true
           force-bump-patch-version: false
           changelog-generator-opt: "emojis=true"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Show changelog
-        if: steps.semantic-release.outputs.version != ''
-        run: |
-          echo "Changelog: ${{ steps.semantic-release.outputs.changelog }}"
-
-      - name: Show release information
-        if: steps.semantic-release.outputs.version != ''
-        run: |
-          echo "✅ Released version: ${{ steps.semantic-release.outputs.version }}"
-          echo "🔗 Release URL: ${{ github.server_url }}/${{ github.repository }}/releases/tag/${{ steps.semantic-release.outputs.version }}"

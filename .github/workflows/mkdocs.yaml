@@ -1,15 +1,16 @@
 name: Publish Docs
 
+# Ref: https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax#filter-pattern-cheat-sheet
 on:
-  push:
-    branches:
-      - main
-      # - mkdocs
-    paths:
-      - 'docs/**'
-      - 'mkdocs/**'
-      - 'README.md'
-      - '.github/workflows/mkdocs.yaml'
+  # push:
+  #   branches:
+  #     - main
+  #   paths:
+  #     - 'docs/**'
+  #     - 'mkdocs/**'
+  #     - 'README.md'
+  #     - '.github/workflows/mkdocs.yaml'
+  workflow_call:
   workflow_dispatch:
 
 env:
@@ -28,7 +29,8 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  build_mkdocs:
+  build-mkdocs:
+    name: Build MkDocs Documentation
     runs-on: ubuntu-latest
 
     steps:
@@ -79,8 +81,9 @@ jobs:
       # https://www.mkdocs.org/user-guide/deploying-your-docs/#project-pages
       # - run: mkdocs gh-deploy --config-file mkdocs/mkdocs.yml --force
 
-  deploy_mkdocs:
-    needs: build_mkdocs
+  deploy-mkdocs:
+    name: Deploy MkDocs to GitHub Pages
+    needs: build-mkdocs
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
