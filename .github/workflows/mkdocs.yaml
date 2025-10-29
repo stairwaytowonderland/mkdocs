@@ -10,12 +10,6 @@ on:
   #     - 'mkdocs/**'
   #     - 'README.md'
   #     - '.github/workflows/mkdocs.yaml'
-  # workflow_run:
-  #   workflows: ["Publish Docs"]
-  #   types:
-  #     - completed
-  #   branches:
-  #     - main
   workflow_call:
   workflow_dispatch:
 

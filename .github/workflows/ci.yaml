@@ -1,15 +1,10 @@
-name: CI Pipeline
+name: CI
 
 # Ref: https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax#filter-pattern-cheat-sheet
 on:
-  pull_request:
-    types: [opened, synchronize, reopened]
   push:
     branches:
       - main
-      - docs/*
-      - dev/*
-      - feature/*
     paths:
       - 'docs/**'
       - 'mkdocs/**'
