@@ -2,7 +2,6 @@ name: Validate Conventional Commits
 
 # Ref: https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax#filter-pattern-cheat-sheet
 on:
-  push:
   pull_request:
     types: [opened, synchronize, reopened]
   workflow_call:
