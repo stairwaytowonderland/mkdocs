@@ -1,0 +1,88 @@
+.md-nav--primary > .md-nav__list > .md-nav__item {
+    padding-top: .4rem;
+    padding-bottom: .8rem;
+    border-top: .05rem solid var(--md-default-fg-color--lightest);
+}
+
+.md-nav--primary > .md-nav__list > .md-nav__item > .md-nav > .md-nav__list {
+    padding-top: 0.2rem;
+}
+
+.md-nav--primary.md-nav--lifted > .md-nav__list > .md-nav__item,
+.md-nav--primary > .md-nav__list > .md-nav__item:first-child {
+    border-top: none;
+    padding-top: 0;
+}
+
+.md-nav--secondary > .md-nav__list {
+    margin-top: .4rem;
+}
+
+.md-nav--secondary > .md-nav__list > .md-nav__item {
+    padding-top: .1rem;
+    padding-bottom: .1rem;
+    border-bottom: .05rem dashed var(--md-default-fg-color--lightest);
+}
+
+
+/* .md-nav--secondary .md-nav__list:last-child {
+    padding-bottom: 0.25rem;
+} */
+
+.md-nav--secondary > .md-nav__list > .md-nav__item > .md-nav__link {
+    padding-top: .2rem;
+    padding-bottom: .18rem;
+    margin: 0;
+}
+
+/* .md-nav--secondary > .md-nav__list > .md-nav__item:last-child {
+    padding-top: 0.2rem;
+} */
+
+.md-nav--secondary > .md-nav__list > .md-nav__item > .md-nav .md-nav__item {
+    border-bottom: .05rem dashed var(--md-default-fg-color--lightest);
+}
+
+.md-nav--secondary > .md-nav__list > .md-nav__item > .md-nav .md-nav__item .md-nav__link {
+    padding-bottom: .4rem;
+    margin: 0;
+    padding-top: .25rem;
+}
+
+.md-nav--secondary > .md-nav__list > .md-nav__item > .md-nav .md-nav__item .md-nav__link:first-child {
+    padding-bottom: 0.2rem;
+}
+
+.md-nav--secondary > .md-nav__list > .md-nav__item > .md-nav .md-nav__item:last-child {
+    border-bottom: none;
+}
+
+/* .md-typeset h2:first-of-type {
+    margin-top: 1rem;
+} */
+
+.md-typeset .md-source-file:last-child {
+    margin-top: 1.6rem;
+    padding-top: 1rem;
+    border-top: .05rem solid var(--md-default-fg-color--lightest);
+}
+
+.glightbox[data-type=image] {
+    cursor: zoom-in;
+}
+
+.thumb:hover,
+.thumb:focus-visible,
+.glightbox[data-type=image] > img:hover,
+.glightbox[data-type=image] > img:focus-visible {
+    transform: scale(1.01);
+    box-shadow: 0 4px 12px var(--shadow-color);
+    outline: 2px solid var(--foreground-intense);
+    outline-offset: 2px;
+}
+
+.thumb,
+.glightbox[data-type=image] > img {
+    transition: transform .2s ease, box-shadow .2s ease;
+    border-radius: 4px;
+}

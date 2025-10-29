@@ -1,0 +1,48 @@
+/* @keyframes spin {
+  from {
+    transform:rotate(0deg);
+  }
+
+  to {
+    transform:rotate(360deg);
+  }
+} */
+
+/* @page {
+    counter-increment: page;
+
+    @bottom-center {
+        content: 'Page ' counter(page) ' of ' counter(pages);
+    }
+} */
+
+/* @page {
+    size: a4 portrait;
+    margin: 25mm 10mm 25mm 10mm;
+    counter-increment: page;
+    font-family: "Roboto","Helvetica Neue",Helvetica,Arial,sans-serif;
+    white-space: pre;
+    color: grey;
+
+    @top-left {
+        content: '© 2025 StairwayToWonderland Co';
+    }
+
+    @top-center {
+        content: string(chapter);
+    }
+    @top-right {
+        content: 'Page ' counter(page);
+    }
+} */
+
+
+/* mkdocs-page-pdf styles
+https://github.com/brospars/mkdocs-page-pdf?tab=readme-ov-file#blank-page-at-the-end
+(seems to truncate some actual content ... mostly on pages with collapes code and mermaid diagrams) */
+
+/* @media print {
+    body {
+        contain: strict;
+    }
+} */
