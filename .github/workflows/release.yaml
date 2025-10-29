@@ -11,7 +11,7 @@ on:
 
 jobs:
   release:
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    if: github.event.workflow_run.conclusion == 'success'
 
     name: Create Release
     runs-on: ubuntu-latest

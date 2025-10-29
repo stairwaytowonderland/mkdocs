@@ -1,9 +1,7 @@
-name: CI Pipeline
+name: CI
 
 # Ref: https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax#filter-pattern-cheat-sheet
 on:
-  pull_request:
-    types: [opened, synchronize, reopened]
   push:
     branches:
       - main
@@ -13,6 +11,7 @@ on:
       - 'README.md'
       - '.github/workflows/mkdocs.yaml'
   workflow_dispatch:
+
 
 jobs:
   # conventional-commits:
