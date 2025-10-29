@@ -1,0 +1,31 @@
+name: CI Pipeline
+
+# Ref: https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax#filter-pattern-cheat-sheet
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+  push:
+    branches:
+      - main
+    paths:
+      - 'docs/**'
+      - 'mkdocs/**'
+      - 'README.md'
+      - '.github/workflows/mkdocs.yaml'
+  workflow_dispatch:
+
+jobs:
+  # conventional-commits:
+  #   name: Check Conventional Commits
+  #   uses: ./.github/workflows/conventional-commits.yaml
+
+  mkdocs:
+    name: Publish Docs to GitHub Pages
+    uses: ./.github/workflows/mkdocs.yaml
+    # needs: conventional-commits
+    # if: needs.conventional-commits.outputs.commit-count > 0
+
+  release:
+    name: Create Release
+    uses: ./.github/workflows/release.yaml
+    needs: mkdocs
