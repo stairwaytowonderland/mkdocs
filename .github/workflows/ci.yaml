@@ -16,7 +16,7 @@ env:
 
 jobs:
   init:
-    if: github.event_name == 'workflow_dispatch'
+    # if: github.event_name == 'workflow_dispatch'
 
     name: Set ENV Outputs
     runs-on: ubuntu-latest
