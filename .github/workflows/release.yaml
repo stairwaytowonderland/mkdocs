@@ -1,0 +1,48 @@
+name: Release
+
+# Ref: https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax#filter-pattern-cheat-sheet
+on:
+  # push:
+  #   branches:
+  #     - main
+    # paths:
+    #   - 'docs/**'
+    #   - 'mkdocs/**'
+    #   - 'README.md'
+  workflow_run:
+    workflows: ["CI"]
+    types:
+      - completed
+    branches:
+      - main
+  workflow_call:
+
+# permissions:
+#   contents: write
+#   issues: write
+#   pull-requests: write
+
+jobs:
+  release:
+    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
+
+    name: Create Release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Run semantic release
+        uses: ./.github/actions/semantic-release
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          allow-initial-development-versions: true
+          force-bump-patch-version: false
+          changelog-generator-opt: "emojis=true"
+          # prerelease: true

@@ -1,0 +1,14 @@
+name: PR Checks (Conventional Commits)
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    # paths:
+    #   - 'docs/**'
+    #   - 'mkdocs/**'
+    #   - 'README.md'
+
+jobs:
+  conventional-commits:
+    name: Validate Conventional Commits
+    uses: ./.github/workflows/conventional-commits.yaml
