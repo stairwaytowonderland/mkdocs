@@ -1,0 +1,9 @@
+nav:
+  - index.md
+  - "*"
+  - "MkDocs Help":
+    - "MkDocs Official<br><small>Official documentation</small>": https://www.mkdocs.org/
+    - "Material for MkDocs<br><small>Framework by squidfunk</small>": https://squidfunk.github.io/mkdocs-material/getting-started/
+    - "Awesome Nav Plugin<br><small>Custom navigation for MkDocs</small>": https://lukasgeiter.github.io/mkdocs-awesome-nav/
+    - "3rd Party Cheat Sheet<br><small>Useful resources for MkDocs</small>": https://yakworks.github.io/docmark/cheat-sheet/
+    - "Python Markdown<br><small>Markdown flavor used in MkDocs</small>": user-guide/authoring/markdown/index.html#markdown-flavor
