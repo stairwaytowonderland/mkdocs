@@ -6,6 +6,10 @@ branding:
   icon: 'terminal'
   color: 'gray-dark'
 inputs:
+  base-ref-from-default-branch:
+    description: 'Whether to use the repository default branch as the base ref'
+    required: false
+    default: 'true'
   base-ref:
     description: 'Base reference to compare commits against (e.g., main, master)'
     required: false
@@ -44,7 +48,11 @@ runs:
         set -e
 
         # Configuration
-        BASE_REF="${{ inputs.base-ref }}"
+        if [ "${{ inputs.base-ref-from-default-branch }}" = "true" ]; then
+          BASE_REF="origin/${{ github.event.repository.default_branch }}"
+        else
+          BASE_REF="${{ inputs.base-ref }}"
+        fi
         FAIL_ON_ERROR="${{ inputs.fail-on-error }}"
         ALLOWED_TYPES="${{ inputs.types }}"
         ALLOWED_SCOPES="${{ inputs.scopes }}"

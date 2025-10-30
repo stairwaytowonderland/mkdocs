@@ -27,7 +27,7 @@ jobs:
           echo "min_commit_count=${MIN_COMMIT_COUNT_FOR_NO_PR_PUBLISH:-0}" >> $GITHUB_OUTPUT
 
   conventional-commits:
-    name: Check Conventional Commits
+    name: Validate Conventional Commits
     uses: ./.github/workflows/conventional-commits.yaml
 
   mkdocs:
