@@ -23,8 +23,25 @@ on:
 #   pull-requests: write
 
 jobs:
+  check-merge:
+    name: Check if Merge Commit
+    runs-on: ubuntu-latest
+    outputs:
+      is-merge: ${{ steps.check-merge.outputs.is_merge == 'true' }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - name: Check if merge commit
+        id: check-merge
+        uses: ./.github/actions/merge-commit
+
   release:
-    # if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
+    if: needs.check-merge.outputs.is-merge != 'true'
+    needs: check-merge
 
     name: Create Release
     runs-on: ubuntu-latest
