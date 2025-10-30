@@ -10,6 +10,12 @@ on:
   #     - 'mkdocs/**'
   #     - 'README.md'
   #     - '.github/workflows/mkdocs.yaml'
+  workflow_run:
+    workflows: ["Release"]
+    types:
+      - completed
+    branches:
+      - main
   workflow_call:
   workflow_dispatch:
 
@@ -30,6 +36,8 @@ concurrency:
 
 jobs:
   build-mkdocs:
+    if: github.event.workflow_run.conclusion == 'success'
+
     name: Build MkDocs Documentation
     runs-on: ubuntu-latest
 
