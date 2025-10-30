@@ -9,7 +9,7 @@ jobs:
     name: Check if Merge Commit
     runs-on: ubuntu-latest
     outputs:
-      is-merge: ${{ steps.check-merge.outputs.is_merge }}
+      is-merge: ${{ steps.check-merge.outputs.is_merge == 'true' }}
 
     steps:
       - name: Checkout code
@@ -24,5 +24,4 @@ jobs:
   conventional-commits:
     name: Validate Conventional Commits
     needs: check-merge
-    if: needs.check-merge.outputs.is-merge != 'true'
     uses: ./.github/workflows/conventional-commits.yaml
