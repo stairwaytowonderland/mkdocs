@@ -48,7 +48,7 @@ jobs:
     name: Release
     uses: ./.github/workflows/release.yaml
     with:
-      workflow_call: ${{ (needs.conventional-commits.outputs.commit-count >= needs.init.outputs.min-commit-count && needs.conventional-commits.outputs.is-merge != 'true') || needs.conventional-commits.outputs.is-merge == 'true' }}
+      workflow_call: ${{ !((needs.conventional-commits.outputs.commit-count >= needs.init.outputs.min-commit-count && needs.conventional-commits.outputs.is-merge != 'true') || needs.conventional-commits.outputs.is-merge == 'true') }}
     needs: [init, conventional-commits]
 
   mkdocs:
