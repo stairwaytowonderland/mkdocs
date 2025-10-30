@@ -36,7 +36,7 @@ jobs:
   #   needs: [init, conventional-commits]
   #   if: (needs.conventional-commits.outputs.commit-count > needs.init.outputs.min-commit-count && needs.conventional-commits.outputs.is-merge != 'true') || needs.conventional-commits.outputs.is-merge == 'true'
 
-  release:
-    name: Release
-    uses: ./.github/workflows/release.yaml
-    # needs: mkdocs
+  # release:
+  #   name: Release
+  #   uses: ./.github/workflows/release.yaml
+  #   # needs: mkdocs
