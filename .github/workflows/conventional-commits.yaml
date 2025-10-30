@@ -70,12 +70,12 @@ jobs:
         if: github.event_name == 'pull_request' || steps.check-merge.outputs.is_merge != 'true'
         id: conventional-commits
         uses: ./.github/actions/conventional-commits
-        # with:
-        #   base-ref-from-default-branch: ${{ inputs.base-ref-from-default-branch }}
-        #   base-ref: ${{ inputs.base-ref }}
-        #   fail-on-error: ${{ inputs.fail-on-error }}
-        #   types: ${{ inputs.types }}
-        #   scopes: ${{ inputs.scopes }}
+        with:
+          base-ref-from-default-branch: ${{ inputs.base-ref-from-default-branch }}
+          base-ref: ${{ inputs.base-ref }}
+          fail-on-error: ${{ inputs.fail-on-error }}
+          types: ${{ inputs.types }}
+          scopes: ${{ inputs.scopes }}
 
       - name: Comment on PR (if validation fails)
         if: failure() && github.event_name == 'pull_request'
