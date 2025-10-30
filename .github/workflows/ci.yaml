@@ -50,8 +50,7 @@ jobs:
     with:
       workflow_call: ${{ github.event_name == 'workflow_dispatch' }}
     needs: [init, conventional-commits]
-    if: github.event_name == 'workflow_dispatch'
-    # (needs.conventional-commits.outputs.commit-count >= needs.init.outputs.min-commit-count && needs.conventional-commits.outputs.is-merge != 'true') || needs.conventional-commits.outputs.is-merge == 'true'
+    if: (needs.conventional-commits.outputs.commit-count >= needs.init.outputs.min-commit-count && needs.conventional-commits.outputs.is-merge != 'true') || needs.conventional-commits.outputs.is-merge == 'true'
 
   mkdocs:
     name: Publish Docs to GitHub Pages
