@@ -41,6 +41,7 @@ jobs:
 
   release:
     # if: github.event_name == 'workflow_call' || (github.event_name == 'push' && needs.check-merge.outputs.is-merge == 'true')
+    if: github.event_name == 'workflow_call'
     needs: check-merge
 
     name: Create Release
