@@ -1,0 +1,112 @@
+name: 'Semantic Release Checker'
+description: 'Performs semantic versioning and creates releases using go-semantic-release'
+
+# Ref: https://haya14busa.github.io/github-action-brandings/
+branding:
+  icon: 'terminal'
+  color: 'gray-dark'
+
+inputs:
+  github-token:
+    description: 'GitHub token for creating releases'
+    required: true
+  allow-initial-development-versions:
+    description: 'Allow initial development versions (0.x.x)'
+    required: false
+    default: 'true'
+  force-bump-patch-version:
+    description: 'Force a patch version bump even without commits'
+    required: false
+    default: 'false'
+  changelog-generator-opt:
+    description: 'Options for changelog generator'
+    required: false
+    default: 'emojis=true'
+  dry-run:
+    description: 'Run in dry-run mode without creating actual release'
+    required: false
+    default: 'false'
+  prerelease:
+    description: 'Whether to create a prerelease'
+    required: false
+  custom-arguments:
+    description: 'Additional custom arguments for go-semantic-release'
+    required: false
+  tag-format-prefix:
+    description: 'Prefix for version tags'
+    required: false
+    default: 'v'
+  fail-on-no-release:
+    description: 'Whether to fail the action if no release is created'
+    required: false
+    default: 'false'
+
+outputs:
+  version:
+    description: 'The new version number (e.g., 1.2.3)'
+    value: ${{ steps.semantic-release.outputs.version }}
+  version_major:
+    description: 'The major part of the new version number'
+    value: ${{ steps.semantic-release.outputs.version_major }}
+  version_minor:
+    description: 'The minor part of the new version number'
+    value: ${{ steps.semantic-release.outputs.version_minor }}
+  version_patch:
+    description: 'The patch part of the new version number'
+    value: ${{ steps.semantic-release.outputs.version_patch }}
+  version_prerelease:
+    description: 'The prerelease part of the new version number'
+    value: ${{ steps.semantic-release.outputs.version_prerelease }}
+  changelog:
+    description: 'The generated changelog text'
+    value: ${{ steps.semantic-release.outputs.changelog }}
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Semantic Release
+      uses: go-semantic-release/action@v1
+      id: semantic-release
+      with:
+        github-token: ${{ inputs.github-token }}
+        allow-initial-development-versions: ${{ inputs.allow-initial-development-versions }}
+        force-bump-patch-version: ${{ inputs.force-bump-patch-version }}
+        changelog-generator-opt: ${{ inputs.changelog-generator-opt }}
+        dry: ${{ inputs.dry }}
+        prerelease: ${{ inputs.prerelease }}
+        custom-arguments: ${{ inputs.custom-arguments }}
+      env:
+        GITHUB_TOKEN: ${{ inputs.github-token }}
+
+    - name: Show changelog
+      if: steps.semantic-release.outputs.version != ''
+      shell: bash
+      run: |
+        echo "::group::📝 Changelog"
+        echo "${{ steps.semantic-release.outputs.changelog }}"
+        echo "::endgroup::"
+
+    - name: Show release information
+      if: steps.semantic-release.outputs.version != ''
+      shell: bash
+      run: |
+        echo "::notice::🚀 Release created successfully!"
+        echo "> [!TIP]" >> $GITHUB_STEP_SUMMARY
+        echo "> ### Release Information" >> $GITHUB_STEP_SUMMARY
+        echo "> ✅ **Released version**: ${{ steps.semantic-release.outputs.version }}" >> $GITHUB_STEP_SUMMARY
+        echo ">     - Major version: ${{ steps.semantic-release.outputs.version_major }}" >> $GITHUB_STEP_SUMMARY
+        echo ">     - Minor version: ${{ steps.semantic-release.outputs.version_minor }}" >> $GITHUB_STEP_SUMMARY
+        echo ">     - Patch version: ${{ steps.semantic-release.outputs.version_patch }}" >> $GITHUB_STEP_SUMMARY
+        echo ">     - Prerelease version: ${{ steps.semantic-release.outputs.version_prerelease }}" >> $GITHUB_STEP_SUMMARY
+        echo "> " >> $GITHUB_STEP_SUMMARY
+        echo "> 🔗 **Release URL**: ${{ github.server_url }}/${{ github.repository }}/releases/tag/${{ inputs.tag-format-prefix }}${{ steps.semantic-release.outputs.version }}" >> $GITHUB_STEP_SUMMARY
+
+    - name: No release created
+      if: steps.semantic-release.outputs.version == ''
+      shell: bash
+      run: |
+        echo "::notice::ℹ️ No new release created - no releasable commits found"
+        if [ "${{ inputs.fail-on-no-release }}" = "true" ]; then
+          echo "::error::No release was created, failing as per configuration."
+          exit 1
+        fi
