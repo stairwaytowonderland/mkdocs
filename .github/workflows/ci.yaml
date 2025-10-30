@@ -47,6 +47,8 @@ jobs:
   release:
     name: Release
     uses: ./.github/workflows/release.yaml
+    with:
+      workflow_call: true
     needs: [conventional-commits]
 
   mkdocs:

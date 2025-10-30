@@ -16,6 +16,12 @@ on:
   #   branches:
   #     - main
   workflow_call:
+    inputs:
+      workflow_call:
+        description: 'To distinguish workflow_call from push'
+        type: boolean
+        required: false
+        default: false
 
 # permissions:
 #   contents: write
@@ -40,8 +46,7 @@ jobs:
         uses: ./.github/actions/merge-commit
 
   release:
-    # if: github.event_name == 'workflow_call' || (github.event_name == 'push' && needs.check-merge.outputs.is-merge == 'true')
-    if: github.event_name == 'workflow_call'
+    if: inputs.workflow_call == 'true' || (github.event_name == 'push' && needs.check-merge.outputs.is-merge == 'true')
     needs: check-merge
 
     name: Create Release
