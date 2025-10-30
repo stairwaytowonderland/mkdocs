@@ -3,12 +3,12 @@ name: Release
 # Ref: https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax#filter-pattern-cheat-sheet
 on:
   workflow_run:
-    workflows: ["CI"]
+    workflows: ["Validate Conventional Commits"]
     types:
       - completed
     branches:
       - main
-  # workflow_call:
+  workflow_call:
   workflow_dispatch:
 
 # permissions:

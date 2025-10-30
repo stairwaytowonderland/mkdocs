@@ -2,20 +2,14 @@ name: Publish Docs
 
 # Ref: https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax#filter-pattern-cheat-sheet
 on:
-  # push:
-  #   branches:
-  #     - main
-  #   paths:
-  #     - 'docs/**'
-  #     - 'mkdocs/**'
-  #     - 'README.md'
-  #     - '.github/workflows/mkdocs.yaml'
-  workflow_run:
-    workflows: ["Release"]
-    types:
-      - completed
+  push:
     branches:
       - main
+    paths:
+      - 'docs/**'
+      - 'mkdocs/**'
+      - 'README.md'
+      - '.github/workflows/mkdocs.yaml'
   workflow_call:
   workflow_dispatch:
 
