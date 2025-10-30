@@ -1,0 +1,13 @@
+nav:
+  - index.md
+  - "Python Markdown":
+    - "In MkDocs": https://www.mkdocs.org/user-guide/writing-your-docs/#writing-with-markdown
+    - "Differences": https://python-markdown.github.io/#differences
+  - "Syntax Guides":
+    - "Daring Fireball<br><small>by John Gruber</small>": https://daringfireball.net/projects/markdown/
+    - "CommonMark":
+      - "Specification": https://spec.commonmark.org/
+      - "Guide": https://commonmark.org/help/
+    - "GitHub Flavored":
+      - "Specification": https://github.github.com/gfm/
+      - "Guide": https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax
