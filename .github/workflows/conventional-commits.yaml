@@ -1,0 +1,81 @@
+name: Conventional Commits
+
+# Ref: https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax#filter-pattern-cheat-sheet
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  validate-commits:
+    name: Check commit messages
+    runs-on: ubuntu-latest
+
+    outputs:
+      conventional-commits-valid: ${{ steps.conventional-commits.outputs.valid == 'true' }}
+      commit-count: ${{ steps.conventional-commits.outputs.commit-count }}
+      is-merge: ${{ steps.check-merge.outputs.is_merge }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - name: Check if merge commit
+        id: check-merge
+        uses: ./.github/actions/merge-commit
+
+      - name: Check conventional commits
+        if: github.event_name == 'pull_request' || steps.check-merge.outputs.is_merge != 'true'
+        id: conventional-commits
+        uses: ./.github/actions/conventional-commits
+        # with:
+        #   base-ref-from-default-branch: ${{ inputs.base-ref-from-default-branch }}
+        #   base-ref: ${{ inputs.base-ref }}
+        #   fail-on-error: ${{ inputs.fail-on-error }}
+        #   types: ${{ inputs.types }}
+        #   scopes: ${{ inputs.scopes }}
+
+      - name: Comment on PR (if validation fails)
+        if: failure() && github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `## ❌ Conventional Commits Validation Failed
+
+              Your commits do not follow the [Conventional Commits](https://www.conventionalcommits.org/) specification.
+
+              ### Required Format
+              \`\`\`
+              <type>[optional scope][!]: <description>
+
+              [optional body]
+
+              [optional footer(s)]
+              \`\`\`
+
+              ### Examples
+              - \`feat: add new user authentication\`
+              - \`fix(api): correct validation error\`
+              - \`docs: update installation guide\`
+              - \`feat!: redesign navigation (breaking change)\`
+
+              ### Allowed Types
+              - **feat**: New features
+              - **fix**: Bug fixes
+              - **docs**: Documentation changes
+              - **style**: Code style changes (formatting, etc.)
+              - **refactor**: Code refactoring
+              - **perf**: Performance improvements
+              - **test**: Test additions or updates
+              - **build**: Build system changes
+              - **ci**: CI/CD changes
+              - **chore**: Other changes that don't modify src or test files
+              - **revert**: Revert a previous commit
+
+              Please amend your commits to follow this format.`
+            })
