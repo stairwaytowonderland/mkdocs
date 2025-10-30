@@ -4,6 +4,47 @@ name: Conventional Commits
 on:
   pull_request:
     types: [opened, synchronize, reopened]
+  workflow_call:
+    inputs:
+      base-ref-from-default-branch:
+        type: boolean
+        description: 'Whether to use the repository default branch as the base ref'
+        required: false
+        default: true
+      base-ref:
+        type: string
+        description: 'Base reference to compare commits against (e.g., main, master)'
+        required: false
+        default: 'origin/main'
+      fail-on-error:
+        type: boolean
+        description: 'Whether to fail the action if non-conventional commits are found'
+        required: false
+        default: true
+      types:
+        type: string
+        description: 'Comma-separated list of allowed commit types'
+        required: false
+        default: 'feat,fix,docs,style,refactor,perf,test,build,ci,chore,revert'
+      scopes:
+        type: string
+        description: 'Comma-separated list of allowed scopes (leave empty to allow any; example: "api,ui,core,docs")'
+        required: false
+      pr:
+        type: boolean
+        description: 'Whether to comment on the PR if validation fails'
+        required: false
+        default: true
+    outputs:
+      valid:
+        description: 'Status of conventional commits validation (valid/invalid)'
+        value: ${{ jobs.validate-commits.outputs.conventional-commits-valid == 'true' }}
+      commit-count:
+        description: 'Total number of commits checked'
+        value: ${{ jobs.validate-commits.outputs.commit-count }}
+      is-merge:
+        description: 'Whether the push was a merge commit'
+        value: ${{ jobs.validate-commits.outputs.is-merge == 'true' }}
 
 jobs:
   validate-commits:
