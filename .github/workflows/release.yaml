@@ -40,7 +40,7 @@ jobs:
         uses: ./.github/actions/merge-commit
 
   release:
-    if: needs.check-merge.outputs.is-merge == 'foo'
+    if: needs.check-merge.outputs.is-merge == 'true'
     needs: check-merge
 
     name: Create Release
