@@ -22,7 +22,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       min-commit-count: ${{ steps.set-outputs.outputs.min_commit_count }}
-      is-merge: ${{ steps.check-merge.outputs.is_merge }}
+      is-merge: ${{ steps.check-merge.outputs.is_merge == 'true' }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v5
