@@ -2,9 +2,9 @@ name: CI
 
 # Ref: https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax#filter-pattern-cheat-sheet
 on:
-  # push:
-  #   branches:
-  #     - main
+  push:
+    branches:
+      - main
   #   paths:
   #     - 'docs/**'
   #     - 'mkdocs/**'
@@ -38,11 +38,11 @@ jobs:
         id: check-merge
         uses: ./.github/actions/merge-commit
 
-  # conventional-commits:
-  #   name: Validate Conventional Commits
-  #   uses: ./.github/workflows/conventional-commits.yaml
-  #   needs: init
-  #   if: needs.init.outputs.is-merge != 'true'
+  conventional-commits:
+    name: Validate Conventional Commits
+    uses: ./.github/workflows/conventional-commits.yaml
+    needs: init
+    if: needs.init.outputs.is-merge != 'true'
 
   # release:
   #   name: Release
