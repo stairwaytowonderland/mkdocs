@@ -94,6 +94,7 @@ runs:
         echo "> [!TIP]" >> $GITHUB_STEP_SUMMARY
         echo "> ### Release Information" >> $GITHUB_STEP_SUMMARY
         echo "> ✅ **Released version**: ${{ steps.semantic-release.outputs.version }}" >> $GITHUB_STEP_SUMMARY
+        echo "> " >> $GITHUB_STEP_SUMMARY
         echo ">     - Major version: ${{ steps.semantic-release.outputs.version_major }}" >> $GITHUB_STEP_SUMMARY
         echo ">     - Minor version: ${{ steps.semantic-release.outputs.version_minor }}" >> $GITHUB_STEP_SUMMARY
         echo ">     - Patch version: ${{ steps.semantic-release.outputs.version_patch }}" >> $GITHUB_STEP_SUMMARY
