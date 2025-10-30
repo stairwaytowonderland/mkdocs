@@ -48,8 +48,9 @@ jobs:
     name: Release
     uses: ./.github/workflows/release.yaml
     with:
-      workflow_call: ${{ github.event_name == 'workflow_dispatch' }}
+      workflow_call: true
     needs: [init, conventional-commits]
+    if: github.event_name == 'workflow_dispatch'
 
   mkdocs:
     name: Publish Docs to GitHub Pages
