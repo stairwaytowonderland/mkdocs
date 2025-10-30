@@ -2,13 +2,15 @@ name: Release
 
 # Ref: https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax#filter-pattern-cheat-sheet
 on:
-  workflow_run:
-    workflows: ["CI"]
-    types:
-      - completed
-    branches:
-      - main
-  # workflow_call:
+  # push:
+  #   branches:
+  #     - main
+  #   # paths:
+  #   #   - 'docs/**'
+  #   #   - 'mkdocs/**'
+  #   #   - 'README.md'
+  #   #   - '.github/workflows/mkdocs.yaml'
+  workflow_call:
   workflow_dispatch:
 
 # permissions:
