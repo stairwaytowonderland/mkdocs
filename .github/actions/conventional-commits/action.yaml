@@ -158,12 +158,19 @@ runs:
             echo "::error::Invalid commit: $invalid"
           done
 
-          echo ""
-          echo "::error::Commits must follow Conventional Commits specification:"
-          echo "::error::Format: <type>[optional scope][!]: <description>"
-          echo "::error::Example: feat(api): add user authentication"
-          echo "::error::Example: fix!: correct critical security issue"
-          echo "::error::Allowed types: $ALLOWED_TYPES"
+          echo "> [!CAUTION]" >> $GITHUB_STEP_SUMMARY
+          echo "> ### Commits must follow Conventional Commits specification:" >> $GITHUB_STEP_SUMMARY
+          echo "> **Format**: *<type\>[optional scope][!]: <description\>*" >> $GITHUB_STEP_SUMMARY
+          echo "> " >> $GITHUB_STEP_SUMMARY
+          echo "> - Example: feat(api): add user authentication" >> $GITHUB_STEP_SUMMARY
+          echo "> - Example: fix!: correct critical security issue" >> $GITHUB_STEP_SUMMARY
+          echo "> " >> $GITHUB_STEP_SUMMARY
+          echo "> **Allowed types**: $ALLOWED_TYPES" >> $GITHUB_STEP_SUMMARY
+          if [ -n "$ALLOWED_SCOPES" ]; then
+            echo "> **Allowed scopes**: $ALLOWED_SCOPES" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "> **Allowed scopes**: any" >> $GITHUB_STEP_SUMMARY
+          fi
 
           if [ "$FAIL_ON_ERROR" = "true" ]; then
             exit 1
