@@ -2,8 +2,8 @@ name: Conventional Commits
 
 # Ref: https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax#filter-pattern-cheat-sheet
 on:
-  pull_request:
-    types: [opened, synchronize, reopened]
+  # pull_request:
+  #   types: [opened, synchronize, reopened]
   workflow_call:
     inputs:
       base-ref-from-default-branch:

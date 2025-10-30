@@ -1,0 +1,28 @@
+name: PR Checks (Conventional Commits)
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  check-merge:
+    name: Check if Merge Commit
+    runs-on: ubuntu-latest
+    outputs:
+      is-merge: ${{ steps.check-merge.outputs.is_merge }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - name: Check if merge commit
+        id: check-merge
+        uses: ./.github/actions/merge-commit
+
+  conventional-commits:
+    name: Validate Conventional Commits
+    needs: check-merge
+    if: needs.check-merge.outputs.is-merge != 'true'
+    uses: ./.github/workflows/conventional-commits.yaml
