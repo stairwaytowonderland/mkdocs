@@ -45,4 +45,5 @@ jobs:
           allow-initial-development-versions: true
           force-bump-patch-version: false
           changelog-generator-opt: "emojis=true"
+          fail-on-no-release: true
           # prerelease: true
