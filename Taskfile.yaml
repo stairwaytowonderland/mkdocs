@@ -1,0 +1,374 @@
+version: "3"
+
+dotenv: ['mkdocs/.env', '{{.ENV}}/.env', '{{.HOME}}/.env']
+
+env:
+  MKDOCS_LOCAL_EDIT_URI: 'vscode://file/{{.USER_WORKING_DIR}}/docs/'
+  DOCKER_LINUX_PLATFORM: '--platform linux/amd64'
+
+  ###############################################
+  # Chromium Revisions (for Pyppeteer)
+  # https://commondatastorage.googleapis.com/chromium-browser-snapshots/index.html
+  ###############################################
+  # Set to stable version for Mac; Comment out to download/use latest
+  PYPPETEER_CHROMIUM_REVISION_MAC: '1367869'
+  # FIXME: Find stable version for Linux in Docker
+  PYPPETEER_CHROMIUM_REVISION_LINUX: '1367869'
+  ###############################################
+
+vars:
+  DEFAULT_COLOR: '{{.MKDOCS_PRIMARY_COLOR | default "white"}}'
+
+  USE_LINUX_PLATFORM: '{{.USE_LINUX_PLATFORM | default "false"}}'
+
+  PORT: '{{.PORT | default "8000"}}'
+
+  DEBUG: '{{.DEBUG | default "false"}}'
+
+  REPO_OWNER: '{{.REPO_OWNER | default "stairwaytowonderland"}}'
+  REPO_NAME: '{{.REPO_NAME | default "mkdocs"}}'
+
+tasks:
+  default:
+    desc: "Lists all available tasks"
+    cmds:
+      - task --list
+
+  debug:
+    desc: "Debug environment variables"
+    cmds:
+      - |
+        if [ "{{.DEBUG}}" = "true" ]; then
+          printf "\n\033[2m%s\033[0m\n" "Debug Mode is ON"
+          printenv | sort | grep MKDOCS_
+        fi
+    silent: false
+
+  wait:
+    desc: "Wait for user input to continue"
+    cmds:
+      # Check for new line character (enter) before continuing
+      - |
+        if [ "{{.DEBUG}}" = "true" ]; then
+          printf "\n\033[2m%s\033[0m\n" "Debug Mode is ON"
+          printf "\nTo continue, press the <%s> key ...\n" "Enter"
+          read -r _
+        fi
+    silent: true
+
+  _insert_or_replace_pyppeteer:
+    desc: "Insert or replace a line in a file"
+    env:
+      PYPPETEER_CHROMIUM_REVISION: '{{.PYPPETEER_CHROMIUM_REVISION}}'
+    vars:
+      FILE: '{{.FILE}}'
+      SEARCH: '{{.SEARCH}}'
+      REPLACE: '{{.REPLACE}}'
+      TARGET_OS: '{{.TARGET_OS}}'
+    cmds:
+      - |
+        test -n "$PYPPETEER_CHROMIUM_REVISION" || PYPPETEER_CHROMIUM_REVISION=$(curl -X GET -H 'Content-Type: plain/text' https://www.googleapis.com/download/storage/v1/b/chromium-browser-snapshots/o/{{.TARGET_OS}}%2FLAST_CHANGE?alt=media)
+        if grep -qF "{{.SEARCH}}" "{{.FILE}}"; then
+          sed -i '' "s/^{{.SEARCH}}.*/{{.REPLACE}}/" "{{.FILE}}"
+        else
+          printf "\n%s\n" "{{.REPLACE}}" >> "{{.FILE}}"
+        fi
+    silent: false
+
+  _insert_or_replace_dockerplatform:
+    desc: "Insert or replace a line in a file"
+    vars:
+      FILE: '{{.FILE}}'
+      SEARCH: '{{.SEARCH}}'
+    cmds:
+      - |
+        if [ -f {{.FILE}} ]; then
+          set -a; . {{.FILE}}; set +a
+        else
+          touch {{.FILE}}
+        fi
+        if [ "{{.USE_LINUX_PLATFORM}}" = "true" ]; then
+          DOCKER_PLATFORM="${DOCKER_DEFAULT_PLATFORM:-${DOCKER_LINUX_PLATFORM}}"
+          grep -qF "{{.SEARCH}}" {{.FILE}} || printf "{{.SEARCH}}'%s'\n" "${DOCKER_PLATFORM}" >> {{.FILE}}
+        else
+          DOCKER_PLATFORM="${DOCKER_DEFAULT_PLATFORM:-}"
+          sed -i.bak '/{{.SEARCH}}/d' {{.FILE}} || true
+        fi
+    silent: false
+
+  init:
+    desc: "Initialize MKDocs environment"
+    cmds:
+      - python3 -m venv {{.USER_WORKING_DIR}}/.venv
+      - task: _insert_or_replace_pyppeteer
+        vars:
+          FILE: '{{.USER_WORKING_DIR}}/.venv/bin/activate'
+          SEARCH: 'export PYPPETEER_CHROMIUM_REVISION='
+          REPLACE: "export PYPPETEER_CHROMIUM_REVISION='${PYPPETEER_CHROMIUM_REVISION}'"
+          TARGET_OS: '{{.USER_OS}}'
+          PYPPETEER_CHROMIUM_REVISION: '{{.PYPPETEER_CHROMIUM_REVISION | default .PYPPETEER_CHROMIUM_REVISION_MAC}}'
+      - |
+        . {{.USER_WORKING_DIR}}/.venv/bin/activate
+        pip3 install --upgrade pip
+        pip3 install -r {{.USER_WORKING_DIR}}/mkdocs/requirements.txt
+      - task: venv
+    silent: false
+    vars:
+      USER_OS: '{{.USER_OS | default "Mac"}}'
+
+  venv:
+    desc: "Activate MKDocs virtual environment"
+    cmds:
+      - |
+        printf "\n\033[4m%s\033[0m\n" "A Virtual Environment will be activated for the current shell session"
+      - |
+        printf "\nTo \033[1m%s\033[0m activate the virtual environment, run the following command from '%s':\n" "manually" "{{.USER_WORKING_DIR}}"
+        printf "\n\t\033[1m%s\033[0m\n" ". .venv/bin/activate"
+      - |
+        printf "\n%s\n" "To deactivate the virtual environment, run the following command:"
+        printf "\n\t\033[1m%s\033[0m\n" "deactivate"
+      - task: wait
+    silent: true
+
+  serve:
+    desc: "Start MKDocs development server with custom settings"
+    deps:
+      - init
+    env:
+      MKDOCS_PRIMARY_COLOR: '{{.COLOR}}'
+      MKDOCS_EDIT_URI: '{{.MKDOCS_LOCAL_EDIT_URI | default .MKDOCS_EDIT_URI}}'
+      PORT: '{{.PORT}}'
+    cmds:
+      - task: debug
+        silent: true
+      - task: wait
+      - |
+        . {{.USER_WORKING_DIR}}/.venv/bin/activate
+        com=(mkdocs serve -f mkdocs/mkdocs.yml --dev-addr="127.0.0.1:${PORT}" --livereload {{.CLI_ARGS}})
+        echo -e "\n\033[32m${com[@]}\033[0m\n"
+        "${com[@]}"
+    silent: true
+    vars:
+      COLOR: '{{ .COLOR | default .DEFAULT_COLOR }}'
+
+  serve-light:
+    desc: "Start MKDocs development server with light theme"
+    cmds:
+      - task: serve
+        vars:
+          COLOR: white
+    silent: false
+
+  serve-dark:
+    desc: "Start MKDocs development server with dark theme"
+    cmds:
+      - task: serve
+        vars:
+          COLOR: black
+    silent: false
+
+  build:
+    desc: "Build MKDocs site"
+    deps:
+      - init
+    env:
+      MKDOCS_PRIMARY_COLOR: '{{.COLOR}}'
+      MKDOCS_EDIT_URI: '{{.MKDOCS_LOCAL_EDIT_URI | default .MKDOCS_EDIT_URI}}'
+    cmds:
+      - task: debug
+        silent: true
+      - task: wait
+      - |
+        . {{.USER_WORKING_DIR}}/.venv/bin/activate
+        com=(mkdocs build -f mkdocs/mkdocs.yml --clean {{.CLI_ARGS}})
+        echo -e "\n\033[32m${com[@]}\033[0m\n"
+        "${com[@]}"
+    silent: true
+    vars:
+      COLOR: '{{ .COLOR | default .DEFAULT_COLOR }}'
+
+  build-light:
+    desc: "Build MKDocs site with light theme"
+    cmds:
+      - task: build
+        vars:
+          COLOR: light
+    silent: false
+
+  build-dark:
+    desc: "Build MKDocs site with dark theme"
+    cmds:
+      - task: build
+        vars:
+          COLOR: dark
+    silent: false
+
+  http:
+    desc: "Start a simple HTTP server to serve the built site"
+    deps:
+      - '{{if eq .MKDOCS_PRIMARY_COLOR "black"}}build-dark{{else}}build{{end}}'
+    env:
+      PORT: '{{.PORT}}'
+    cmds:
+      - |
+        com=(python3 -m http.server ${PORT:-8000} --directory mkdocs/dist {{.CLI_ARGS}})
+        echo -e "\n\033[32m${com[@]}\033[0m\n"
+        "${com[@]}"
+    silent: true
+
+  http-light:
+    desc: "Start a simple HTTP server to serve the built site with light theme"
+    cmds:
+      - task: http
+        vars:
+          COLOR: white
+    silent: false
+
+  http-dark:
+    desc: "Start a simple HTTP server to serve the built site with dark theme"
+    cmds:
+      - task: http
+        vars:
+          COLOR: black
+    silent: false
+
+  docker-init:
+    desc: "Initialize Docker environment"
+    cmds:
+      - task: _insert_or_replace_dockerplatform
+        vars:
+          FILE: '{{.USER_WORKING_DIR}}/.env'
+          SEARCH: 'DOCKER_PLATFORM='
+      - task: _insert_or_replace_pyppeteer
+        vars:
+          FILE: '{{.USER_WORKING_DIR}}/.env'
+          SEARCH: 'PYPPETEER_CHROMIUM_REVISION='
+          REPLACE: "PYPPETEER_CHROMIUM_REVISION='${PYPPETEER_CHROMIUM_REVISION}'"
+          TARGET_OS: '{{.DOCKER_OS}}'
+          PYPPETEER_CHROMIUM_REVISION: '{{.PYPPETEER_CHROMIUM_REVISION | default .PYPPETEER_CHROMIUM_REVISION_LINUX}}'
+      - |
+        if [ -f {{.USER_WORKING_DIR}}/.env ]; then
+          set -a; . {{.USER_WORKING_DIR}}/.env; set +a
+        fi
+        com=(docker pull $DOCKER_PLATFORM squidfunk/mkdocs-material:latest)
+        echo -e "\n\033[32m${com[@]}\033[0m\n"
+        "${com[@]}"
+    silent: true
+    vars:
+      DOCKER_OS: '{{.DOCKER_OS | default "Linux_x64"}}'
+
+  docker-serve:
+    desc: "Serve the MKDocs site using Docker"
+    deps:
+      - docker-init
+    env:
+      PORT: '{{.PORT}}'
+      USER_WORKING_DIR: '{{.USER_WORKING_DIR}}'
+      DOCKER_PLATFORM: '{{.LINUX_PLATFORM}}'
+      ENTRYPOINT: '/sbin/tini'
+      COMMAND: 'mkdocs/bin/mkdocs.sh serve'
+    cmds:
+      - task: debug
+        silent: true
+      - task: wait
+      - |
+        if [ -f {{.USER_WORKING_DIR}}/.env ]; then
+          set -a; . {{.USER_WORKING_DIR}}/.env; set +a
+        fi
+        printf "\n\033[4m%s\033[0m\n" "Serving MKDocs site using Docker on port ${PORT:-8000}"
+        test -z "${DOCKER_PLATFORM}" || printf "\033[2m%s\033[0m\n" "Using Docker platform option: ${DOCKER_PLATFORM}"
+        printf "\nENTRYPOINT: \033[1m%s\033[0m\nCOMMAND: \033[1m%s\033[0m\n" "${ENTRYPOINT}" "${COMMAND}"
+        com=(docker run --rm -it ${DOCKER_PLATFORM} -p ${PORT:-8000}:${PORT:-8000} -v ${USER_WORKING_DIR}:/root -e PORT=${PORT:-8000} -e PIP_ROOT_USER_ACTION=ignore -e PYPPETEER_CHROMIUM_REVISION=${PYPPETEER_CHROMIUM_REVISION} --workdir /root --entrypoint ${ENTRYPOINT} squidfunk/mkdocs-material ${COMMAND} {{.CLI_ARGS}})
+        echo -e "\n\033[32m${com[@]}\033[0m\n"
+        "${com[@]}"
+      - task: docker-clean-cache
+    silent: true
+
+  docker-build:
+    desc: "Build the MKDocs site using Docker"
+    deps:
+      - docker-init
+    env:
+      PORT: '{{.PORT}}'
+      USER_WORKING_DIR: '{{.USER_WORKING_DIR}}'
+      DOCKER_PLATFORM: '{{.LINUX_PLATFORM}}'
+      ENTRYPOINT: '/sbin/tini'
+      COMMAND: 'mkdocs/bin/mkdocs.sh build'
+    cmds:
+      - task: debug
+        silent: true
+      - task: wait
+      - |
+        if [ -f {{.USER_WORKING_DIR}}/.env ]; then
+          set -a; . {{.USER_WORKING_DIR}}/.env; set +a
+        fi
+        printf "\n\033[4m%s\033[0m\n" "Building MKDocs site using Docker"
+        test -z "${DOCKER_PLATFORM}" || printf "\033[2m%s\033[0m\n" "Using Docker platform option: ${DOCKER_PLATFORM}"
+        printf "\nENTRYPOINT: \033[1m%s\033[0m\nCOMMAND: \033[1m%s\033[0m\n" "${ENTRYPOINT}" "${COMMAND}"
+        com=(docker run --rm -it ${DOCKER_PLATFORM} -v ${USER_WORKING_DIR}:/root -e PIP_ROOT_USER_ACTION=ignore -e PYPPETEER_CHROMIUM_REVISION=${PYPPETEER_CHROMIUM_REVISION} --workdir /root --entrypoint ${ENTRYPOINT} squidfunk/mkdocs-material ${COMMAND} {{.CLI_ARGS}})
+        echo -e "\n\033[32m${com[@]}\033[0m\n"
+        "${com[@]}"
+      - task: docker-clean-cache
+    silent: true
+
+  clean:
+    desc: "Clean the built site"
+    cmds:
+      - rm -rf {{.DIR}} || echo "No existing build directory to remove"
+      - rm -f .env.bak
+    silent: false
+    vars:
+      DIR: 'mkdocs/dist'
+
+  docker-clean-cache:
+    desc: "Clean Docker cache directories"
+    cmds:
+      - (set -x; rm -rf .cache)
+      - (set -x; rm -rf .local)
+    silent: true
+
+  docker-clean:
+    desc: "Clean the directories created by Docker"
+    cmds:
+      - task: docker-clean-cache
+      - (set -x; rm -rf .venv-docker)
+      - (set -x; rm -rf .ash_history)
+    silent: true
+
+  get-github-deployments:
+    desc: "Get GitHub deployments for the repository"
+    env:
+      REPO_OWNER: '{{.REPO_OWNER}}'
+      REPO_NAME: '{{.REPO_NAME}}'
+    cmds:
+      - |
+        com="gh api --method GET -H \"Accept: application/vnd.github+json\" -H \"X-GitHub-Api-Version: 2022-11-28\" /repos/${REPO_OWNER}/${REPO_NAME}/deployments | jq '.[] | .id' | sort -n"
+        echo -e "\n\033[32m${com}\033[0m\n"
+        eval "${com}"
+    silent: true
+
+  get-github-deployment:
+    desc: "Delete a GitHub deployment by ID"
+    env:
+      REPO_OWNER: '{{.REPO_OWNER}}'
+      REPO_NAME: '{{.REPO_NAME}}'
+      ID: '{{.ID}}'
+    cmds:
+      - |
+        com="gh api --method GET -H \"Accept: application/vnd.github+json\" -H \"X-GitHub-Api-Version: 2022-11-28\" /repos/${REPO_OWNER}/${REPO_NAME}/deployments/${ID}"
+        echo -e "\n\033[32m${com}\033[0m\n"
+        eval "${com}"
+    silent: true
+
+  delete-github-deployment:
+    desc: "Delete a GitHub deployment by ID"
+    env:
+      REPO_OWNER: '{{.REPO_OWNER}}'
+      REPO_NAME: '{{.REPO_NAME}}'
+      ID: '{{.ID}}'
+    cmds:
+      - |
+        com="gh api --method DELETE -H \"Accept: application/vnd.github+json\" -H \"X-GitHub-Api-Version: 2022-11-28\" /repos/${REPO_OWNER}/${REPO_NAME}/deployments/${ID}"
+        echo -e "\n\033[32m${com}\033[0m\n"
+        eval "${com}"
+    silent: true
