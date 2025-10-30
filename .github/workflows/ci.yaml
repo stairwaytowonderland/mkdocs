@@ -41,7 +41,7 @@ jobs:
   conventional-commits:
     name: Validate Conventional Commits
     uses: ./.github/workflows/conventional-commits.yaml
-    needs: init
+    needs: [init]
     if: needs.init.outputs.is-merge != 'true'
 
   release:
