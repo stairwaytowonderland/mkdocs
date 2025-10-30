@@ -46,7 +46,7 @@ jobs:
         uses: ./.github/actions/merge-commit
 
   release:
-    if: inputs.workflow_call == 'true' || (github.event_name == 'push' && needs.check-merge.outputs.is-merge == 'true')
+    if: inputs.workflow_call
     needs: check-merge
 
     name: Create Release
