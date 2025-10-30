@@ -29,25 +29,8 @@ on:
 #   pull-requests: write
 
 jobs:
-  check-merge:
-    name: Check if Merge Commit
-    runs-on: ubuntu-latest
-    outputs:
-      is-merge: ${{ steps.check-merge.outputs.is_merge == 'true' }}
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v5
-        with:
-          fetch-depth: 0
-
-      - name: Check if merge commit
-        id: check-merge
-        uses: ./.github/actions/merge-commit
-
   release:
-    if: (inputs.workflow_call && needs.check-merge.outputs.is-merge != 'true') || (github.event_name == 'push' && needs.check-merge.outputs.is-merge == 'true')
-    needs: check-merge
+    if: inputs.workflow_call || github.event_name == 'push'
 
     name: Create Release
     runs-on: ubuntu-latest
