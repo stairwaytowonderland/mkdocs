@@ -27,12 +27,14 @@ jobs:
         uses: actions/checkout@v5
         with:
           fetch-depth: 0
-          token: ${{ secrets.GH_PAT }}  # Use PAT instead of GITHUB_TOKEN
+          # Use PAT instead of GITHUB_TOKEN to cause semantic-release to trigger tag pipeline when tag is created
+          token: ${{ secrets.GH_PAT }}
 
       - name: Run semantic release
         uses: ./.github/actions/semantic-release
         with:
-          github-token: ${{ secrets.GH_PAT }}  # Use PAT instead of GITHUB_TOKEN
+          # Use PAT instead of GITHUB_TOKEN to cause semantic-release to trigger tag pipeline when tag is created
+          github-token: ${{ secrets.GH_PAT }}
           allow-initial-development-versions: true
           force-bump-patch-version: false
           changelog-generator-opt: "emojis=true"

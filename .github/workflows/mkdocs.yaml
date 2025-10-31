@@ -36,8 +36,6 @@ concurrency:
 
 jobs:
   build-mkdocs:
-    if: (github.event_name != 'workflow_run' && inputs.workflow_call) || github.event.workflow_run.conclusion == 'success'
-
     name: Build MkDocs Documentation
     runs-on: ubuntu-latest
 
