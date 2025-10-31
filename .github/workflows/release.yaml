@@ -2,19 +2,19 @@ name: Release
 
 # Ref: https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax#filter-pattern-cheat-sheet
 on:
-  # push:
-  #   branches:
-  #     - main
+  push:
+    branches:
+      - main
   #   paths:
   #     - 'docs/**'
   #     - 'mkdocs/**'
   #     - 'README.md'
-  workflow_run:
-    workflows: ["CI"]
-    types:
-      - completed
-    branches:
-      - main
+  # workflow_run:
+  #   workflows: ["CI"]
+  #   types:
+  #     - completed
+  #   branches:
+  #     - main
   workflow_call:
     inputs:
       workflow_call:
