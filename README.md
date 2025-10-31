@@ -6,8 +6,8 @@
 [![Release](https://github.com/stairwaytowonderland/mkdocs/actions/workflows/release.yaml/badge.svg)](https://github.com/stairwaytowonderland/mkdocs/actions/workflows/release.yaml)
 [![GitHub Release](https://img.shields.io/github/v/release/stairwaytowonderland/mkdocs?include_prereleases&sort=semver&label=latest)](https://github.com/stairwaytowonderland/mkdocs/releases/latest)
 [![GitHub last commit](https://img.shields.io/github/last-commit/stairwaytowonderland/mkdocs)](https://github.com/stairwaytowonderland/mkdocs/commits/main/)
-[![semantic-release: angular](https://img.shields.io/badge/semantic--release-angular-e10079?logo=semantic-release)](https://github.com/semantic-release/semantic-release)
 [![GitHub License](https://img.shields.io/github/license/stairwaytowonderland/mkdocs)](https://github.com/stairwaytowonderland/mkdocs/tree/main/LICENSE)
+[![semantic-release: angular](https://img.shields.io/badge/semantic--release-angular-e10079?logo=semantic-release)](https://github.com/semantic-release/semantic-release)
 
 [![MkDocs](https://img.shields.io/badge/Docs-Built_with_MkDocs-2FA4E7?logo=Markdown&logoColor=black&labelColor=white)](https://www.mkdocs.org/user-guide/)
 [![Material for MkDocs](https://img.shields.io/badge/Material_for_MkDocs-4051b5?logo=materialformkdocs&labelColor=white)](https://squidfunk.github.io/mkdocs-material/reference/)
