@@ -1,0 +1,78 @@
+/* .md-nav.md-nav--primary,
+.md-nav.md-nav--secondary {
+    padding-top: .3rem;
+} */
+
+/* @media screen and (max-width: 99.9375em) {
+    .md-nav.md-nav--primary,
+    .md-nav.md-nav--secondary {
+        padding-top: .2rem;
+    }
+} */
+
+.md-nav.md-nav--primary,
+.md-nav.md-nav--secondary {
+    padding-top: .3rem;
+}
+
+@media screen and (min-width: 76.25em) {
+    .md-nav.md-nav--primary,
+    .md-nav.md-nav--secondary {
+        padding-top: .3rem;
+    }
+}
+
+@media screen and (min-width: 100em) {
+    .md-nav.md-nav--primary,
+    .md-nav.md-nav--secondary {
+        padding-top: .3rem;
+    }
+}
+
+@media screen and (min-width: 125em) {
+    .md-nav.md-nav--primary,
+    .md-nav.md-nav--secondary {
+        padding-top: .4rem;
+    }
+}
+
+.md-nav > ul.md-nav__list:not(:has(li.md-nav__item)) {
+    display: none;
+}
+
+/* Fixes annotation text being cut off in admonitions that are collapsed by default */
+.md-typeset summary {
+    overflow: inherit;
+}
+
+.md-typeset .pagelistlist {
+    margin-top: .6em;
+    margin-bottom: .6em;
+}
+
+.md-typeset .pagelistlist:first-child {
+    margin-top: 1em;
+}
+
+.md-typeset .pagelistlist:last-child {
+    margin-bottom: 1em;
+}
+
+/* Fixes excessive margin above headings */
+/* .md-typeset h2
+,.md-typeset h3 {
+    margin-top: 1em;
+} */
+
+.md-typeset h4:not(ol + h4)
+,.md-typeset h5:not(ol + h5)
+,.md-typeset h6:not(ol + h6) {
+    margin-top: 1.6em;
+    margin-bottom: .8em;
+}
+
+.md-typeset .highlight + h4
+,.md-typeset .highlight + h5
+,.md-typeset .highlight + h6 {
+    margin-top: 2em;
+}

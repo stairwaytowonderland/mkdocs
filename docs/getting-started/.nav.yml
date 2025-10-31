@@ -1,0 +1,3 @@
+nav:
+  - index.md
+  - "Running MkDocs Locally": "index.html#writing-docs"
