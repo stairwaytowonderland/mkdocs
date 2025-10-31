@@ -9,24 +9,6 @@ on:
   #     - 'docs/**'
   #     - 'mkdocs/**'
   #     - 'README.md'
-  # workflow_run:
-  #   workflows: ["CI"]
-  #   types:
-  #     - completed
-  #   branches:
-  #     - main
-  workflow_call:
-    inputs:
-      workflow_call:
-        description: 'To distinguish workflow_call from push'
-        type: boolean
-        required: false
-        default: false
-      fail-on-no-release:
-        description: 'Whether to fail the workflow if no release is to be published'
-        type: boolean
-        required: false
-        default: false
 
 # permissions:
 #   contents: write
@@ -35,8 +17,6 @@ on:
 
 jobs:
   release:
-    if: inputs.workflow_call || github.event_name == 'push'
-
     name: Create Release
     runs-on: ubuntu-latest
     permissions:
@@ -56,5 +36,4 @@ jobs:
           allow-initial-development-versions: true
           force-bump-patch-version: false
           changelog-generator-opt: "emojis=true"
-          fail-on-no-release: ${{ inputs.fail-on-no-release }}
           prerelease: true
