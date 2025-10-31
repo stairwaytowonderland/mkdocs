@@ -4,6 +4,7 @@ name: Conventional Commits
 on:
   pull_request:
     types: [opened, synchronize, reopened]
+  workflow_call:
 
 jobs:
   validate-commits:
