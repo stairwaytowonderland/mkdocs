@@ -10,10 +10,12 @@ env:
   # Chromium Revisions (for Pyppeteer)
   # https://commondatastorage.googleapis.com/chromium-browser-snapshots/index.html
   ###############################################
-  # Set to stable version for Mac; Comment out to download/use latest
+  # Set to stable versions; Comment out to download/use latest
+  # Mac (with rosetta): https://commondatastorage.googleapis.com/chromium-browser-snapshots/index.html?prefix=Mac/1367869/
+  # Mac_Arm: https://commondatastorage.googleapis.com/chromium-browser-snapshots/index.html?prefix=Mac_Arm/1367888/
   PYPPETEER_CHROMIUM_REVISION_MAC: '1367869'
-  # FIXME: Find stable version for Linux in Docker
-  PYPPETEER_CHROMIUM_REVISION_LINUX: '1367869'
+  # Linux_x64: https://commondatastorage.googleapis.com/chromium-browser-snapshots/index.html?prefix=Linux_x64/1181205/
+  PYPPETEER_CHROMIUM_REVISION_LINUX: '1181205'
   ###############################################
 
 vars:

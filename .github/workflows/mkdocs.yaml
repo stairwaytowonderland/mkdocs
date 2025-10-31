@@ -11,6 +11,7 @@ on:
     #   - 'docs/**'
     #   - 'mkdocs/**'
     #   - 'README.md'
+  workflow_call:
 
 env:
   PYTHON_VERSION: 3.x

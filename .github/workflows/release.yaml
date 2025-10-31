@@ -9,6 +9,7 @@ on:
   #     - 'docs/**'
   #     - 'mkdocs/**'
   #     - 'README.md'
+  workflow_call:
 
 # permissions:
 #   contents: write
