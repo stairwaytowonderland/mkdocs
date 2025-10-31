@@ -1,0 +1,115 @@
+# https://www.mkdocs.org/#installation
+# Depedency of mkdocs-material
+# mkdocs #==1.6.1
+
+# https://squidfunk.github.io/mkdocs-material/getting-started/#installation
+mkdocs-material #==7.1.8
+
+# https://github.com/lukasgeiter/mkdocs-awesome-nav
+mkdocs-awesome-nav #==3.1.2
+
+# https://github.com/blueswen/mkdocs-glightbox
+mkdocs-glightbox #==0.5.1
+
+#  https://github.com/alanpt/mkdocs-pagelist-plugin
+mkdocs-pagelist-plugin #==0.2.2
+
+# https://facelessuser.github.io/pymdown-extensions/
+pymdown-extensions #==8.2
+
+# https://github.com/mkdocstrings/mkdocstrings
+mkdocstrings #==0.15.2
+
+# https://github.com/fralau/mkdocs-mermaid2-plugin
+mkdocs-mermaid2-plugin #==1.2.2
+
+# https://github.com/mkdocstrings/autorefs
+mkdocs-autorefs #==1.4.3
+
+mkdocs-git-revision-date-localized-plugin #==1.4.7
+mkdocs-git-authors-plugin #==0.10.0
+mkdocs-minify-plugin #==0.8.0
+
+# https://github.com/brospars/mkdocs-page-pdf
+mkdocs-page-pdf #==0.3.0
+
+# https://github.com/PGijsbers/admonitions
+mkdocs-github-admonitions-plugin #==0.1.1
+
+# https://github.com/sondregronas/mkdocs-callouts
+mkdocs-callouts #==1.16.0
+
+mkdocs-include-markdown-plugin #==7.2.0
+
+# https://github.com/apenwarr/mkdocs-exclude
+mkdocs-exclude #==1.2.0
+
+############################################
+# https://github.com/mkdocstrings/mkdocstrings
+mkdocstrings-python #==1.18.2
+
+### Sample plugin config ###
+# # API auto-documentation (like Sphinx autodoc)
+# - mkdocstrings:
+#     handlers:
+#       python:
+#         inventories:
+#         - https://docs.python.org/3/objects.inv
+#         - https://www.mkdocs.org/objects.inv
+#         paths: [src]
+#         options:
+#           backlinks: tree
+#           docstring_options:
+#             ignore_init_summary: true
+#           docstring_section_style: list
+#           heading_level: 1
+#           inherited_members: true
+#           merge_init_into_class: true
+#           separate_signature: true
+#           show_root_heading: true
+#           show_root_full_path: false
+#           show_signature_annotations: true
+#           show_source: false
+#           show_symbol_type_heading: true
+#           show_symbol_type_toc: true
+#           signature_crossrefs: true
+#           summary: true
+############################################
+
+
+# TODO: Additional testing to determine benefits of the following plugins
+
+############################################
+# https://github.com/domWalters/mkdocs-to-pdf
+# Full site pdf
+# mkdocs-to-pdf #==0.10.1
+
+### Sample plugin config ###
+# # https://mkdocs-to-pdf.readthedocs.io/en/stable/usage/
+# # https://github.com/pawelsikora/example_mkdocs_with_pdf_mermaid_support
+# # https://github.com/orzih/mkdocs-with-pdf/issues/34
+# - to-pdf:
+#     cover_title: Example Repo 🚀 Documentation
+#     cover_subtitle: StairwayToWonderland Co Technical Knowledgebase
+#     copyright: 'Copyright © StairwayToWonderland Co'
+#     # cover_logo: https://upload.wikimedia.org/wikipedia/commons/9/91/Octicons-mark-github.svg
+#     toc_level: 4
+#     # two_columns_level: 3
+#     exclude_pages:
+#       - 'code-snippets/'
+#       - 'interviews/'
+#       - 'sample/'
+#       - 'tags.html'
+#     download_link: header
+#     output_path: pdf/mkdocs.pdf
+#     # enabled_if_env: ENABLE_PDF_EXPORT
+#     # render_js: true
+#     # headless_chrome_path: "/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome"
+############################################
+
+# https://github.com/fralau/mkdocs-macros-plugin
+# mkdocs-macros-plugin #==1.3.9
+
+# https://github.com/pawamoy/markdown-exec
+# Enables execution of code blocks in markdown files.
+# markdown-exec[ansi] #==1.11.0
