@@ -1,12 +1,17 @@
 # Docs Site Template :book:
 
+<div align="center">
+
 [![Publish Docs](https://github.com/stairwaytowonderland/mkdocs/actions/workflows/mkdocs.yaml/badge.svg)](https://github.com/stairwaytowonderland/mkdocs/actions/workflows/mkdocs.yaml)
 [![Release](https://github.com/stairwaytowonderland/mkdocs/actions/workflows/release.yaml/badge.svg)](https://github.com/stairwaytowonderland/mkdocs/actions/workflows/release.yaml)
-[![GitHub Release](https://img.shields.io/github/v/release/stairwaytowonderland/mkdocs?logo=semanticrelease)](https://github.com/stairwaytowonderland/mkdocs/releases/latest)
+[![GitHub Release](https://img.shields.io/github/v/release/stairwaytowonderland/mkdocs?include_prereleases&sort=semver&label=latest)](https://github.com/stairwaytowonderland/mkdocs/releases/latest)
+[![semantic-release: angular](https://img.shields.io/badge/semantic--release-angular-e10079?logo=semantic-release)](https://github.com/semantic-release/semantic-release)
 
 [![MkDocs](https://img.shields.io/badge/Docs-Built_with_MkDocs-2FA4E7?logo=Markdown&logoColor=black&labelColor=white)](https://www.mkdocs.org/user-guide/)
 [![Material for MkDocs](https://img.shields.io/badge/Material_for_MkDocs-4051b5?logo=materialformkdocs&labelColor=white)](https://squidfunk.github.io/mkdocs-material/reference/)
 [![Pages Documentation](https://img.shields.io/badge/Pages-stairwaytowonderland.github.io/mkdocs-254869?logo=GitHub&logoColor=white&labelColor=gray)](https://stairwaytowonderland.github.io/mkdocs/)
+
+</div>
 
 ## Overview :rocket:
 
