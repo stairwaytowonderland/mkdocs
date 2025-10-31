@@ -26,6 +26,10 @@ inputs:
   scopes:
     description: 'Comma-separated list of allowed scopes (leave empty to allow any; example: "api,ui,core,docs")'
     required: false
+  fetch-depth:
+    description: 'Git fetch depth'
+    required: false
+    default: '100'
 
 outputs:
   valid:
@@ -67,7 +71,7 @@ runs:
 
         # Fetch base ref for comparison
         echo "::group::Fetching base reference"
-        git fetch origin "${BASE_REF#origin/}" --depth=100
+        git fetch origin "${BASE_REF#origin/}" --depth=${{ inputs.fetch-depth }}
         echo "::endgroup::"
 
         # Get commit range
