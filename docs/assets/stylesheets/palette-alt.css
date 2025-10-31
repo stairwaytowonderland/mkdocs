@@ -1,0 +1,136 @@
+:root > [data-md-color-scheme=default][data-md-color-primary=white][data-md-color-accent=custom],
+:root > [data-md-color-scheme=default][data-md-color-primary=black][data-md-color-accent=custom],
+:root > [data-md-color-scheme=slate][data-md-color-primary=black][data-md-color-accent=custom] {
+    --md-accent-fg-color--light: #3a8ee1;
+    --md-accent-fg-color--lighter: #67b1eb;
+    --md-accent-fg-color--lightest: #b0d7f5;
+
+    --md-footer-bg-color--dark: #2c334652;
+    --md-footer-bg-color--darker: #00000052;
+    --md-footer-bg-color--darkest: #0000008d;
+}
+
+:root > [data-md-color-scheme=default][data-md-color-primary=white][data-md-color-accent=custom] {
+    --md-header-bg-color: #ffffff80;
+}
+
+:root > [data-md-color-scheme=default][data-md-color-primary=black][data-md-color-accent=custom] {
+    --md-header-bg-color: #2c3346f2;
+}
+
+:root > [data-md-color-scheme=default][data-md-color-primary=white][data-md-color-accent=custom],
+:root > [data-md-color-scheme=default][data-md-color-primary=black][data-md-color-accent=custom] {
+    --md-typeset-a-color: var(--md-accent-fg-color--light);
+
+    --md-default-fg-color--navy: #2c3346;
+    --md-default-fg-color--black: #000000;
+
+    --md-accent-fg-color: #176eab;
+    --md-default-fg-color: var(--md-default-fg-color--black);
+
+    --foreground-intense: #1e1e1e;
+    --shadow-color: rgba(0, 0, 0, .15);
+}
+
+:root > [data-md-color-scheme=slate][data-md-color-primary=black][data-md-color-accent=custom] {
+    --md-typeset-a-color: #f9a73c;
+
+    --md-accent-fg-color--light: #f78f07;
+    --md-accent-fg-color--dark: #f26635;
+
+    --md-accent-fg-color: var(--md-accent-fg-color--light);
+
+    --md-hue: 224deg;
+    --md-default-bg-color: hsla(var(--md-hue), 15%, 14%, 1);
+
+    --md-header-bg-color: #25486980;
+
+    --foreground-intense: #e6eefA;
+    --shadow-color: rgba(255, 255, 255, .30);
+}
+
+[data-md-color-scheme=default][data-md-color-primary=white][data-md-color-accent=custom] .md-header {
+    background-color: var(--md-header-bg-color);
+    backdrop-filter: saturate(180%) blur(10px) drop-shadow(0 0 1.2rem rgba(0, 0, 0, 0.1));
+}
+
+[data-md-color-scheme=default][data-md-color-primary=black][data-md-color-accent=custom] .md-header {
+    background-color: var(--md-header-bg-color);
+    backdrop-filter: saturate(180%) blur(2px);
+}
+
+[data-md-color-scheme=slate][data-md-color-primary=black][data-md-color-accent=custom] .md-header {
+    /* background-color: rgba(0, 0, 0, 0.50); */
+    background-color: var(--md-header-bg-color);
+    backdrop-filter: saturate(180%) blur(5px);
+}
+
+[data-md-color-scheme=default][data-md-color-primary=white][data-md-color-accent=custom] .md-typeset h1,
+[data-md-color-scheme=default][data-md-color-primary=black][data-md-color-accent=custom] .md-typeset h1 {
+    color: var(--md-accent-fg-color--lightest);
+}
+
+[data-md-color-scheme=slate][data-md-color-primary=black][data-md-color-accent=custom] .md-typeset h1 {
+    color: var(--md-default-fg-color--lighter);
+}
+
+[data-md-color-scheme=default][data-md-color-primary=white][data-md-color-accent=custom] .md-typeset h2
+,[data-md-color-scheme=default][data-md-color-primary=black][data-md-color-accent=custom] .md-typeset h2
+,[data-md-color-scheme=default][data-md-color-primary=white][data-md-color-accent=custom] .md-typeset h3
+,[data-md-color-scheme=default][data-md-color-primary=black][data-md-color-accent=custom] .md-typeset h3
+,[data-md-color-scheme=default][data-md-color-primary=white][data-md-color-accent=custom] .md-typeset h4
+,[data-md-color-scheme=default][data-md-color-primary=black][data-md-color-accent=custom] .md-typeset h4
+,[data-md-color-scheme=default][data-md-color-primary=white][data-md-color-accent=custom] .md-typeset h5
+,[data-md-color-scheme=default][data-md-color-primary=black][data-md-color-accent=custom] .md-typeset h5
+,[data-md-color-scheme=default][data-md-color-primary=white][data-md-color-accent=custom] .md-typeset h6
+,[data-md-color-scheme=default][data-md-color-primary=black][data-md-color-accent=custom] .md-typeset h6
+{
+    color: var(--md-default-fg-color--navy)
+}
+
+[data-md-color-scheme=default][data-md-color-primary=white][data-md-color-accent=custom] .md-nav--primary > .md-nav__list > .md-nav__item > .md-nav,
+[data-md-color-scheme=default][data-md-color-primary=black][data-md-color-accent=custom] .md-nav--primary > .md-nav__list > .md-nav__item > .md-nav {
+    color: var(--md-default-fg-color--black);
+}
+
+[data-md-color-scheme=default][data-md-color-primary=white][data-md-color-accent=custom] .md-footer,
+[data-md-color-scheme=default][data-md-color-primary=black][data-md-color-accent=custom] .md-footer {
+    background-color: #254869de;
+}
+
+[data-md-color-scheme=slate][data-md-color-primary=black][data-md-color-accent=custom] .md-footer {
+    background-color: #2c3346;
+}
+
+[data-md-color-scheme=default][data-md-color-primary=white][data-md-color-accent=custom] .md-footer-meta,
+[data-md-color-scheme=default][data-md-color-primary=black][data-md-color-accent=custom] .md-footer-meta {
+    background-color: var(--md-footer-bg-color--darker);
+}
+
+[data-md-color-scheme=slate][data-md-color-primary=black][data-md-color-accent=custom] .md-footer-meta {
+    background-color: var(--md-footer-bg-color--darkest);
+}
+
+[data-md-color-scheme=default][data-md-color-primary=white][data-md-color-accent=custom] .md-tabs,
+[data-md-color-scheme=default][data-md-color-primary=black][data-md-color-accent=custom] .md-tabs,
+[data-md-color-scheme=slate][data-md-color-primary=black][data-md-color-accent=custom] .md-tabs {
+    background-color: var(--md-header-bg-color);
+}
+
+[data-md-color-scheme=default][data-md-color-primary=white][data-md-color-accent=custom] .md-tabs {
+    color: var(--md-default-fg-color);
+}
+
+/* [data-md-color-accent=custom] .md-nav__link--active,
+[data-md-color-accent=custom] .md-nav__link--active:hover {
+    color: var(--md-accent-fg-color);
+} */
+
+/* 254869 */
+/* [data-md-color-scheme=default][data-md-color-accent=custom] .md-nav--primary {
+    color: rgba(37, 72, 105, 1.00);
+}
+
+[data-md-color-scheme=default][data-md-color-accent=custom] .md-nav--secondary {
+    color: rgba(37, 72, 105, 0.87);
+} */

@@ -1,0 +1,211 @@
+@import url("https://fonts.googleapis.com/css2?family=Source%20Sans%20Pro&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=JetBrains%20Mono&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Roboto%20Condensed&display=swap");
+
+:root {
+    /* fonts */
+    --md-text-font: "Source Sans Pro";
+    --md-heading-font: "Roboto";
+    --md-code-font: "JetBrains Mono";
+    --md-header-font: "Roboto Condensed";
+
+    --icon-happy-face: url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2A10 10 0 0 0 2 12a10 10 0 0 0 10 10 10 10 0 0 0 10-10A10 10 0 0 0 12 2M7 9.5C7 8.7 7.7 8 8.5 8s1.5.7 1.5 1.5S9.3 11 8.5 11 7 10.3 7 9.5m5 7.73c-1.75 0-3.29-.73-4.19-1.81L9.23 14c.45.72 1.52 1.23 2.77 1.23s2.32-.51 2.77-1.23l1.42 1.42c-.9 1.08-2.44 1.81-4.19 1.81M15.5 11c-.8 0-1.5-.7-1.5-1.5S14.7 8 15.5 8s1.5.7 1.5 1.5-.7 1.5-1.5 1.5Z"/></svg>');
+    --icon-sad-face: url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2A10 10 0 0 0 2 12a10 10 0 0 0 10 10 10 10 0 0 0 10-10A10 10 0 0 0 12 2m0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8m-4.5-7c.83 0 1.5.67 1.5 1.5S8.33 16 7.5 16s-1.5-.67-1.5-1.5S6.67 13 7.5 13m9 0c.83 0 1.5.67 1.5 1.5S16.33 16 15.5 16s-1.5-.67-1.5-1.5S14.67 13 15.5 13m-4.5 3c2.33 0 4.31 1.46 5.11 3.5H6.89c.8-2.04 2.78-3.5 5.11-3.5Z"/></svg>');
+
+    /* https://www.svgviewer.dev/svg-to-data-uri */
+    --icon-construction-barrier: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KCgo8IS0tIExpY2Vuc2U6IENDIEF0dHJpYnV0aW9uLiBNYWRlIGJ5IHdpc2hmb3JnZS5nYW1lczogaHR0cHM6Ly93d3cud2lzaGZvcmdlLmdhbWVzLyAtLT4KPHN2ZyBmaWxsPSIjMDAwMDAwIiBoZWlnaHQ9IjgwMHB4IiB3aWR0aD0iODAwcHgiIHZlcnNpb249IjEuMSIgaWQ9Ikljb25zIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiAKCSB2aWV3Qm94PSIwIDAgMzIgMzIiIHhtbDpzcGFjZT0icHJlc2VydmUiPgo8cGF0aCBkPSJNMjgsMTBoLTFWOC44YzEuMi0wLjQsMi0xLjUsMi0yLjhjMC0xLjctMS4zLTMtMy0zcy0zLDEuMy0zLDNjMCwxLjMsMC44LDIuNCwyLDIuOFYxMEg3VjguOEM4LjIsOC40LDksNy4zLDksNgoJYzAtMS43LTEuMy0zLTMtM1MzLDQuMywzLDZjMCwxLjMsMC44LDIuNCwyLDIuOFYxMEg0Yy0wLjYsMC0xLDAuNC0xLDF2OWMwLDAuNiwwLjQsMSwxLDFoMXY3YzAsMC42LDAuNCwxLDEsMXMxLTAuNCwxLTF2LTdoMTh2NwoJYzAsMC42LDAuNCwxLDEsMXMxLTAuNCwxLTF2LTdoMWMwLjYsMCwxLTAuNCwxLTF2LTlDMjksMTAuNCwyOC42LDEwLDI4LDEweiBNNiw3QzUuNCw3LDUsNi42LDUsNnMwLjQtMSwxLTFzMSwwLjQsMSwxUzYuNiw3LDYsN3oKCSBNMTAuOCwxNC42bC0yLDNDOC42LDE3LjgsOC4zLDE4LDgsMThjLTAuMiwwLTAuNC0wLjEtMC42LTAuMmMtMC41LTAuMy0wLjYtMC45LTAuMy0xLjRsMi0zYzAuMy0wLjUsMC45LTAuNiwxLjQtMC4zCglDMTEsMTMuNSwxMS4xLDE0LjEsMTAuOCwxNC42eiBNMTcuOCwxNC42bC0yLDNDMTUuNiwxNy44LDE1LjMsMTgsMTUsMThjLTAuMiwwLTAuNC0wLjEtMC42LTAuMmMtMC41LTAuMy0wLjYtMC45LTAuMy0xLjRsMi0zCgljMC4zLTAuNSwwLjktMC42LDEuNC0wLjNDMTgsMTMuNSwxOC4xLDE0LjEsMTcuOCwxNC42eiBNMjQuOCwxNC42bC0yLDNDMjIuNiwxNy44LDIyLjMsMTgsMjIsMThjLTAuMiwwLTAuNC0wLjEtMC42LTAuMgoJYy0wLjUtMC4zLTAuNi0wLjktMC4zLTEuNGwyLTNjMC4zLTAuNSwwLjktMC42LDEuNC0wLjNDMjUsMTMuNSwyNS4xLDE0LjEsMjQuOCwxNC42eiBNMjYsN2MtMC42LDAtMS0wLjQtMS0xczAuNC0xLDEtMXMxLDAuNCwxLDEKCVMyNi42LDcsMjYsN3oiLz4KPC9zdmc+');
+    --icon-vscode-simple: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KPCEtLSBMaWNlbnNlOiBNSVQuIE1hZGUgYnkgdnNjb2RlLWljb25zOiBodHRwczovL2dpdGh1Yi5jb20vdnNjb2RlLWljb25zL3ZzY29kZS1pY29ucyAtLT4KPHN2ZyB2aWV3Qm94PSIwIDAgMzIgMzIiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHRpdGxlPmZpbGVfdHlwZV92c2NvZGU8L3RpdGxlPjxwYXRoIGQ9Ik0yOS4wMSw1LjAzLDIzLjI0NCwyLjI1NGExLjc0MiwxLjc0MiwwLDAsMC0xLjk4OS4zMzhMMi4zOCwxOS44QTEuMTY2LDEuMTY2LDAsMCwwLDIuMywyMS40NDdjLjAyNS4wMjcuMDUuMDUzLjA3Ny4wNzdsMS41NDEsMS40YTEuMTY1LDEuMTY1LDAsMCwwLDEuNDg5LjA2NkwyOC4xNDIsNS43NUExLjE1OCwxLjE1OCwwLDAsMSwzMCw2LjY3MlY2LjYwNUExLjc0OCwxLjc0OCwwLDAsMCwyOS4wMSw1LjAzWiIgc3R5bGU9ImZpbGw6IzAwNjVhOSIvPjxwYXRoIGQ9Ik0yOS4wMSwyNi45N2wtNS43NjYsMi43NzdhMS43NDUsMS43NDUsMCwwLDEtMS45ODktLjMzOEwyLjM4LDEyLjJBMS4xNjYsMS4xNjYsMCwwLDEsMi4zLDEwLjU1M2MuMDI1LS4wMjcuMDUtLjA1My4wNzctLjA3N2wxLjU0MS0xLjRBMS4xNjUsMS4xNjUsMCwwLDEsNS40MSw5LjAxTDI4LjE0MiwyNi4yNUExLjE1OCwxLjE1OCwwLDAsMCwzMCwyNS4zMjhWMjUuNEExLjc0OSwxLjc0OSwwLDAsMSwyOS4wMSwyNi45N1oiIHN0eWxlPSJmaWxsOiMwMDdhY2MiLz48cGF0aCBkPSJNMjMuMjQ0LDI5Ljc0N2ExLjc0NSwxLjc0NSwwLDAsMS0xLjk4OS0uMzM4QTEuMDI1LDEuMDI1LDAsMCwwLDIzLDI4LjY4NFYzLjMxNmExLjAyNCwxLjAyNCwwLDAsMC0xLjc0OS0uNzI0LDEuNzQ0LDEuNzQ0LDAsMCwxLDEuOTg5LS4zMzlsNS43NjUsMi43NzJBMS43NDgsMS43NDgsMCwwLDEsMzAsNi42VjI1LjRhMS43NDgsMS43NDgsMCwwLDEtLjk5MSwxLjU3NloiIHN0eWxlPSJmaWxsOiMxZjljZjAiLz48L3N2Zz4=');
+
+    /* https://simpleicons.org/ */
+    /* simple/git */
+    --icon-git-repo: url('data:image/svg+xml;charset=utf-8,<svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>Git</title><path d="M23.546 10.93L13.067.452c-.604-.603-1.582-.603-2.188 0L8.708 2.627l2.76 2.76c.645-.215 1.379-.07 1.889.441.516.515.658 1.258.438 1.9l2.658 2.66c.645-.223 1.387-.078 1.9.435.721.72.721 1.884 0 2.604-.719.719-1.881.719-2.6 0-.539-.541-.674-1.337-.404-1.996L12.86 8.955v6.525c.176.086.342.203.488.348.713.721.713 1.883 0 2.6-.719.721-1.889.721-2.609 0-.719-.719-.719-1.879 0-2.598.182-.18.387-.316.605-.406V8.835c-.217-.091-.424-.222-.6-.401-.545-.545-.676-1.342-.396-2.009L7.636 3.7.45 10.881c-.6.605-.6 1.584 0 2.189l10.48 10.477c.604.604 1.582.604 2.186 0l10.43-10.43c.605-.603.605-1.582 0-2.187"/></svg>');
+    /* simple/github */
+    --icon-github: url('data:image/svg+xml;charset=utf-8,<svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>GitHub</title><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>');
+    /* simple/refinedgithub */
+    --icon-github-alt: url('data:image/svg+xml;charset=utf-8,<svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>Refined GitHub</title><path d="M18.906.614a3.4 3.4 0 0 0-.896.127c-.955.262-1.824.76-2.646 1.302a13.7 13.7 0 0 0-6.807-.002A11 11 0 0 0 6.71 1.016C6.136.78 5.526.585 4.899.622c-.113.01-.263.013-.315.135a5.8 5.8 0 0 0-.422 1.737 4.8 4.8 0 0 0 .223 1.923 5.4 5.4 0 0 0-1.36 3.053c-.05.453-.036.91-.015 1.365-.934-.237-1.93-.278-2.867-.035-.11.025-.174.16-.128.261.036.092.146.14.238.111.912-.232 1.881-.177 2.783.074q.045.412.107.821c-.798-.196-1.635-.093-2.42.11-.14.033-.18.238-.071.328.083.08.205.04.303.015.74-.18 1.536-.258 2.275-.027.072.248.13.5.226.741l.316.715c.321.63.806 1.167 1.365 1.596a6.8 6.8 0 0 0 1.73.942c.727.277 1.49.449 2.258.571a3.3 3.3 0 0 0-.376.498 3.2 3.2 0 0 0-.335.795c-.43.007-.865.05-1.288-.045a1.95 1.95 0 0 1-.864-.452 3.6 3.6 0 0 1-.62-.739 1 1 0 0 0-.618-.43.73.73 0 0 0-.57.11.67.67 0 0 0-.256.406c-.051.221-.011.452.059.665.122.365.351.687.626.954.485.467 1.089.799 1.726 1.006.535.17 1.112.257 1.667.143-.003.99.003 1.979-.003 2.968-.024.232-.134.45-.28.628-.1.128-.23.231-.377.301-.128.056-.268.102-.362.212a.43.43 0 0 0-.097.422.41.41 0 0 0 .265.25c.148.05.306.039.46.036.45-.013.907-.1 1.306-.318.55-.294.95-.897.925-1.532-.002-.679-.022-1.357-.032-2.036-.003-.385-.018-.771.016-1.155.028 1.009.034 2.019.054 3.028.002.324-.001.654-.09.97a1.8 1.8 0 0 1-.365.682c-.098.12-.226.22-.295.362-.06.114-.07.26.001.37.084.143.254.197.409.22.33.041.657-.073.95-.218a2.16 2.16 0 0 0 .86-.783c.209-.338.308-.736.316-1.13.01-.584.008-1.167.017-1.75.035-.297.021-.596.028-.894.005.175.003.35.004.525-.027.534-.003 1.07-.004 1.604.01.31-.013.624.049.93.062.324.195.636.398.897.234.3.551.53.902.678.294.123.63.204.943.105.156-.044.296-.18.3-.35.003-.169-.105-.312-.22-.427a1.87 1.87 0 0 1-.524-1.36V18.47c.004-.27-.012-.54.014-.809.049.405.034.814.033 1.22.004.733-.003 1.466.004 2.2.015.41.18.822.48 1.108.346.337.824.5 1.295.565q.36.05.719.026c.182-.016.37-.137.408-.324.039-.176-.059-.355-.2-.457-.093-.075-.215-.095-.318-.153-.292-.16-.5-.451-.588-.77-.045-.138-.022-.284-.028-.426.001-.89-.007-1.782.008-2.672.483.097.983.043 1.455-.084a4.6 4.6 0 0 0 1.794-.94c.334-.29.618-.651.761-1.073.068-.205.11-.426.068-.641a.7.7 0 0 0-.233-.414.72.72 0 0 0-.583-.137 1 1 0 0 0-.632.431c-.206.314-.445.612-.744.841a1.9 1.9 0 0 1-.718.346c-.43.103-.876.059-1.314.051a3.9 3.9 0 0 0-.72-1.269c-.032-.022.018-.042.036-.041 1.228-.18 2.453-.528 3.514-1.188a5.15 5.15 0 0 0 1.638-1.593 3 3 0 0 0 .21-.383c.096-.214.203-.423.285-.644a8 8 0 0 0 .218-.725c.661-.228 1.38-.193 2.057-.057q.187.037.375.084c.07.017.154.017.21-.036.104-.084.073-.278-.054-.323-.81-.218-1.677-.314-2.5-.104a9 9 0 0 0 .109-.792c0-.031.038-.032.06-.041.903-.252 1.874-.306 2.788-.073.12.038.227-.057.263-.165v-.037c-.031-.073-.074-.156-.16-.173-.956-.246-1.971-.197-2.92.052.038-.68.033-1.37-.125-2.037a5.5 5.5 0 0 0-1.251-2.399c.386-1.133.283-2.39-.134-3.499-.04-.105-.07-.249-.204-.27q-.15-.03-.3-.032"/></svg>');
+    /* simple/gitlab */
+    --icon-gitlab: url('data:image/svg+xml;charset=utf-8,<svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>GitLab</title><path d="m23.6004 9.5927-.0337-.0862L20.3.9814a.851.851 0 0 0-.3362-.405.8748.8748 0 0 0-.9997.0539.8748.8748 0 0 0-.29.4399l-2.2055 6.748H7.5375l-2.2057-6.748a.8573.8573 0 0 0-.29-.4412.8748.8748 0 0 0-.9997-.0537.8585.8585 0 0 0-.3362.4049L.4332 9.5015l-.0325.0862a6.0657 6.0657 0 0 0 2.0119 7.0105l.0113.0087.03.0213 4.976 3.7264 2.462 1.8633 1.4995 1.1321a1.0085 1.0085 0 0 0 1.2197 0l1.4995-1.1321 2.4619-1.8633 5.006-3.7489.0125-.01a6.0682 6.0682 0 0 0 2.0094-7.003z"/></svg>');
+    /* simple/precommit */
+    --icon-pre-commit: url('data:image/svg+xml;charset=utf-8,<svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>pre-commit</title><path d="M12 0c-.563 0-1.127.215-1.557.645L.645 10.443c-.86.86-.86 2.254 0 3.114l9.798 9.798c.86.86 2.254.86 3.114 0l9.798-9.798c.86-.86.86-2.254 0-3.114L13.557.645A2.195 2.195 0 0012 0zm0 1.74c.493 0 .987.186 1.361.56L21.7 10.64c.75.75.75 1.973 0 2.722L13.361 21.7c-.374.375-.868.56-1.361.56s-.987-.185-1.361-.56L2.3 13.361a1.93 1.93 0 010-2.722L10.639 2.3c.374-.375.868-.56 1.361-.56zm0 .62c-.333 0-.664.127-.92.382L2.742 11.08a1.295 1.295 0 000 1.84l8.338 8.338a1.296 1.296 0 001.84 0l8.338-8.338a1.295 1.295 0 000-1.84L12.92 2.742A1.296 1.296 0 0012 2.36zM9.207 7.624h3.959c.55 0 1.015.079 1.4.238.385.16.7.371.942.633.241.262.417.561.527.897a3.34 3.34 0 010 2.084c-.11.34-.286.64-.527.902a2.628 2.628 0 01-.942.633c-.385.16-.85.238-1.4.238h-2.043v3.156H9.207zm1.916 1.484v2.657h1.514c.222 0 .434-.016.64-.05.207-.032.39-.097.547-.193.158-.095.284-.23.38-.404.094-.174.142-.401.142-.682 0-.28-.048-.507-.143-.681a1.053 1.053 0 00-.379-.404 1.513 1.513 0 00-.547-.194 4.056 4.056 0 00-.64-.049z"/></svg>');
+
+    /* misc */
+    --icon-vscode: url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="100" height="100" viewBox="0 0 50 50"><path d="M 35.445312 2.0117188 C 35.056812 2.0253438 34.669266 2.1265938 34.322266 2.3085938 C 35.227266 2.7565937 35.865703 3.6414062 35.970703 4.6914062 C 35.988703 4.8174062 36 4.9322812 36 4.9882812 L 36 44.988281 C 36 46.174281 35.306594 47.190734 34.308594 47.677734 C 34.672594 47.876734 35.079 47.988281 35.5 47.988281 C 35.873 47.988281 36.224969 47.901859 36.542969 47.755859 L 36.544922 47.759766 C 38.152922 46.927766 46.192281 42.764703 46.488281 42.595703 C 47.421281 42.060703 48 41.061281 48 39.988281 L 48 9.9882812 C 48 8.9902813 47.505734 8.0619062 46.677734 7.5039062 C 46.357734 7.2869063 36.582031 2.2363281 36.582031 2.2363281 L 36.580078 2.2402344 C 36.224078 2.0727344 35.833813 1.9980938 35.445312 2.0117188 z M 33 3.9882812 C 32.744125 3.9882812 32.487969 4.08575 32.292969 4.28125 C 32.292969 4.28125 26.568469 10.718844 20.230469 17.839844 L 27.724609 23.970703 L 34 18.685547 L 34 4.9882812 C 34 4.7322812 33.902031 4.47625 33.707031 4.28125 C 33.511531 4.08575 33.255875 3.9882812 33 3.9882812 z M 8 10.988281 C 7.844 10.988281 7.5538594 10.988844 6.2558594 11.589844 C 5.5408594 11.920844 3.0507812 13.228516 3.0507812 13.228516 C 2.7207812 13.407516 2.4545781 13.687719 2.2675781 14.011719 C 2.3435781 13.999719 2.4190469 13.988281 2.4980469 13.988281 L 2.5 13.988281 C 3.168 13.988281 3.5776562 14.454469 3.7226562 14.605469 C 3.7226562 14.605469 31.929969 45.332313 32.292969 45.695312 C 32.487969 45.890313 32.742047 45.988281 32.998047 45.988281 C 33.254047 45.988281 33.510078 45.890313 33.705078 45.695312 C 33.900078 45.500312 34 45.244281 34 44.988281 L 34 31.658203 C 34 31.658203 9.53375 11.661813 9.34375 11.507812 C 8.97575 11.173813 8.497 10.988281 8 10.988281 z M 2.1992188 15.988281 C 2.0892188 15.988281 2 16.078453 2 16.189453 L 2 34.794922 C 2 34.901922 2.0873125 34.990234 2.1953125 34.990234 C 2.2513125 34.990234 2.3009375 34.964781 2.3359375 34.925781 L 8 28.638672 L 8 22.007812 L 2.3417969 16.046875 C 2.3057969 16.010875 2.2542188 15.988281 2.1992188 15.988281 z M 12.253906 26.802734 C 12.253906 26.802734 3.6585469 36.452781 3.5605469 36.550781 C 3.2895469 36.821781 2.915 36.988281 2.5 36.988281 C 2.422 36.988281 2.3464844 36.978797 2.2714844 36.966797 C 2.4734844 37.317797 2.7697188 37.607156 3.1367188 37.785156 L 3.1328125 37.791016 C 4.0028125 38.233016 6.8739531 39.691703 7.2519531 39.845703 C 7.4899531 39.940703 7.741 39.988281 8 39.988281 C 8.347 39.988281 8.6900469 39.898656 8.9980469 39.722656 C 9.0210469 39.709656 17.527344 32.552734 17.527344 32.552734 L 12.253906 26.802734 z" /></svg>');
+}
+
+body {
+    --link-underline-default-color: var(--md-default-bg-color);
+
+    --md-status--happy: var(--icon-happy);
+    --md-status--sad: var(--icon-sad);
+
+    --md-status--wip: var(--icon-construction-barrier);
+    --md-status--vscode-alt: var(--icon-vscode-simple);
+
+    --md-status--git-repo: var(--icon-git-repo);
+    --md-status--github: var(--icon-github);
+    --md-status--github-alt: var(--icon-github-alt);
+    --md-status--gitlab: var(--icon-gitlab);
+    --md-status--pre-commit: var(--icon-pre-commit);
+    --md-status--vscode: var(--icon-vscode);
+}
+
+.md-main .md-typeset a:not([tabindex], .md-tag, .md-button, .headerlink) {
+    text-decoration: underline;
+    text-underline-offset: 0.1em;
+    text-decoration-thickness: 0.08em;
+    text-decoration-color: var(--link-underline-default-color);
+}
+.md-main .md-typeset a:not([tabindex], .md-tag, .md-button, .headerlink):hover {
+    text-decoration-color: var(--md-accent-fg-color);
+}
+
+.md-typeset h1,
+.md-typeset h2 {
+    font-family: var(--md-heading-font), var(--md-text-font-family);
+}
+
+.md-header {
+    font-family: var(--md-header-font), var(--md-text-font-family);
+}
+
+.md-status--happy::after {
+    mask-image: var(--md-status--happy);
+    -webkit-mask-image: var(--md-status--happy);
+    -moz-mask-image: var(--md-status--happy);
+}
+
+.md-status--sad::after {
+    mask-image: var(--md-status--sad);
+    -webkit-mask-image: var(--md-status--sad);
+    -moz-mask-image: var(--md-status--sad);
+}
+
+.md-status--vscode::after {
+    mask-image: var(--md-status--vscode);
+    -webkit-mask-image: var(--md-status--vscode);
+    -moz-mask-image: var(--md-status--vscode);
+}
+
+.md-status--vscode-alt::after {
+    mask-image: var(--md-status--vscode-alt);
+    -webkit-mask-image: var(--md-status--vscode-alt);
+    -moz-mask-image: var(--md-status--vscode-alt);
+}
+
+.md-status--wip::after {
+    mask-image: var(--md-status--wip);
+    -webkit-mask-image: var(--md-status--wip);
+    -moz-mask-image: var(--md-status--wip);
+}
+
+.md-status--git-repo::after {
+    mask-image: var(--md-status--git-repo);
+    -webkit-mask-image: var(--md-status--git-repo);
+    -moz-mask-image: var(--md-status--git-repo);
+}
+
+.md-status--github::after {
+    mask-image: var(--md-status--github);
+    -webkit-mask-image: var(--md-status--github);
+    -moz-mask-image: var(--md-status--github);
+}
+
+.md-status--github-alt::after {
+    mask-image: var(--md-status--github-alt);
+    -webkit-mask-image: var(--md-status--github-alt);
+    -moz-mask-image: var(--md-status--github-alt);
+}
+
+.md-status--gitlab::after {
+    mask-image: var(--md-status--gitlab);
+    -webkit-mask-image: var(--md-status--gitlab);
+    -moz-mask-image: var(--md-status--gitlab);
+}
+
+.md-status--pre-commit::after {
+    mask-image: var(--md-status--pre-commit);
+    -webkit-mask-image: var(--md-status--pre-commit);
+    -moz-mask-image: var(--md-status--pre-commit);
+}
+
+.icon {
+    /* set width to 25% */
+    width: 25%;
+}
+
+.main-introduction.center {
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.main-introduction.center > h1 {
+    padding-left: 5rem;
+}
+
+.main-introduction.center:has(+ .main-introduction.center) > h1 {
+    margin-bottom: 1em;
+}
+
+@media screen and (max-width: 59.984375em) {
+    .main-introduction.center,
+    .main-introduction.center > h1 {
+        padding-left: 0;
+        text-align: left;
+    }
+}
+
+/* progress bar */
+.progress-label {
+    font-weight: 700;
+    line-height: 1.2rem;
+    margin: 0;
+    overflow: hidden;
+    position: absolute;
+    text-align: center;
+    text-shadow: 0 0 6px #000000;
+    width: 100%;
+    white-space: nowrap;
+}
+.progress-bar {
+    background-color: #2979ff;
+    float: left;
+    height: 1.2rem;
+}
+.progress {
+    background-color: #cccccc8a;
+    display: block;
+    height: 1.2rem;
+    margin: 0.5rem 0;
+    position: relative;
+    width: 100%;
+}
+.progress.thin {
+    height: 0.4rem;
+    margin-top: 0.9rem;
+}
+.progress.thin .progress-label {
+    margin-top: -0.4rem;
+}
+.progress.thin .progress-bar {
+    height: 0.4rem;
+}
+.progress-100plus .progress-bar {
+    background-color: #00e676;
+}
+.progress-80plus .progress-bar {
+    background-color: #fbc02d;
+}
+.progress-60plus .progress-bar {
+    background-color: #ff9100;
+}
+.progress-40plus .progress-bar {
+    background-color: #ff5252;
+}
+.progress-20plus .progress-bar {
+    background-color: #ff1744;
+}
+.progress-0plus .progress-bar {
+    background-color: #f50057;
+}
