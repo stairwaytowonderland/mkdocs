@@ -1,0 +1,17 @@
+repos:
+- repo: https://github.com/antonbabenko/pre-commit-terraform
+  rev: v1.100.0 # Get the latest from: https://github.com/antonbabenko/pre-commit-terraform/releases
+  hooks:
+    - id: terraform_fmt
+
+    - id: terraform_validate
+
+    - id: terraform_docs
+      args:
+        - --args=document
+        - --args=--sort=false
+        - --args=--hide providers
+
+    - id: terraform_tflint
+      exclude: ^(?:.*/)?examples/
+

@@ -1,0 +1,397 @@
+#################################################
+# General Configuration
+# https://squidfunk.github.io/mkdocs-material/getting-started/
+# https://albrittonanalytics.com/
+# https://github.com/squidfunk/mkdocs-material/discussions/6337
+#################################################
+
+# When using a dedicated file outside of the docs folder,
+# add the parent directory to the list of watch folders so
+# that when the glossary file is updated, the project is
+# automatically reloaded when running mkdocs serve.
+# watch:
+#   - ../
+
+# Project information
+site_name: !ENV MKDOCS_SITE_NAME
+site_author: !ENV MKDOCS_SITE_AUTHOR
+site_description: !ENV MKDOCS_SITE_DESCRIPTION
+
+validation:
+  absolute_links: ignore
+  unrecognized_links: ignore
+  anchors: ignore
+
+# blob/ opens the View mode on GitHub, but not the Raw form; alternatively use edit/ to open the file in edit mode
+# mkdocs/ branch of the repository
+# docs/ paths are relative to this directory
+# edit_uri: blob/main/docs/
+# MKDOCS_LOCAL_EDIT_URI="vscode://file/$(pwd)/docs"
+# MKDOCS_EDIT_URI="edit/mkdocs/docs/"
+edit_uri: !ENV MKDOCS_EDIT_URI
+
+# TODO: Update copyright year automatically
+# https://github.com/squidfunk/mkdocs-material/discussions/4969#discussioncomment-7290363
+# (macros plugin?)
+copyright: !ENV MKDOCS_SITE_COPYRIGHT
+
+# Repository
+repo_name: !ENV MKDOCS_REPO_NAME
+repo_url: !ENV MKDOCS_REPO_URL
+site_url: !ENV MKDOCS_SITE_URL
+
+# MkDocs directories
+docs_dir: !ENV MKDOCS_DOCS_DIR
+site_dir: !ENV MKDOCS_SITE_DIR
+
+# Disable use of directory URLs (pretty urls) to allow easier linking to specific pages
+# The awesome-nav plugin doesn't fully support directory URLs
+# (very apparent when testing with `python -m http.server`, so disabling for now)
+use_directory_urls: false
+
+exclude_docs: |
+  sample/*
+  '!.*'
+
+#################################################
+# Theme Configuration
+#################################################
+theme:
+  name: material
+  custom_dir: overrides
+  features:
+    # - header.autohide
+    # https://squidfunk.github.io/mkdocs-material/reference/tooltips/
+    - content.tooltips
+    - content.action.edit
+    - content.action.view
+    ### Code Blocks
+    - content.code.copy
+    - content.code.annotate
+    ### Navigation
+    - toc.follow
+    # https://squidfunk.github.io/mkdocs-material/setup/setting-up-navigation/#section-index-pages
+    - navigation.indexes
+    - navigation.top
+    - navigation.tracking
+    # - navigation.tabs
+    ## - navigation.tabs.sticky
+    # - navigation.sections
+    ## - navigation.expand
+    - navigation.instant
+    - navigation.instant.progress
+    # - navigation.footer
+  favicon: !ENV [MKDOCS_FAVICON_PATH, 'assets/images/favicon.png']
+  logo: !ENV MKDOCS_LOGO_PATH
+  icon:
+    logo: !ENV [MKDOCS_LOGO_ICON, 'material/book-open-page-variant']
+    repo: fontawesome/brands/git-alt
+    edit: material/file-document-edit-outline # material/pencil
+    view: material/eye
+    # admonition:
+    #   note: octicons/tag-16
+    #   abstract: octicons/checklist-16
+    #   info: octicons/info-16
+    #   tip: octicons/flame-16
+    #   success: octicons/check-16
+    #   question: octicons/question-16
+    #   warning: octicons/alert-16
+    #   failure: octicons/x-circle-16
+    #   danger: octicons/zap-16
+    #   bug: octicons/bug-16
+    #   example: octicons/beaker-16
+    #   quote: octicons/quote-16
+    #   data: octicons/database-16
+    #   squirell: octicons/squirrel-16
+    #   goal: octicons/goal-16
+    #   rocket: octicons/rocket-16
+
+  font:
+    # Remove to be GDPR compliant (fonts loaded via extra CSS)
+    font: false
+    code: false
+    # text: !ENV [MKDOCS_TEXT_FONT, 'Roboto']
+    # code: !ENV [MKDOCS_CODE_FONT, 'Roboto Mono']
+    ### Geometric, Tech
+    # text: Jost # Displays "--" as long dash; a little wide
+    # text: Oswald # Doesn't display "--" as long dash (workaround: use markdown_extensions.smarty); a little narrow
+    ### Standard, Neutral, Professional
+    # text: Roboto # Doesn't display "--" as long dash (workaround: use markdown_extensions.smarty)
+    # text: Barlow # *Top Favorite: Displays "--" as long dash
+    # text: News Cycle # Favorite: Displays "--" as long dash; except h3+ and italics a bit thin
+    ### Modern, Clean, Bold
+    # text: Roboto Condensed # *Top Favorite: except doesn't display "--" as long dash (workaround: use markdown_extensions.smarty)
+    # text: Barlow Semi Condensed # *Top Favorite: Displays "--" as long dash; except body text thinner than Roboto Condensed
+    ### Classic, Simple, Softer
+    # text: Cabin Condensed # Favorite: except doesn't display "--" as long dash (workaround: use markdown_extensions.smarty)
+    # text: Source Sans Pro # *Top Favorite: except doesn't display "--" as long dash (workaround: use markdown_extensions.smarty)
+    ### Monospace (for code blocks)
+    # code: Roboto Mono
+    # code: JetBrains Mono
+    # code: Fira Code
+    # code: Source Code Pro
+    # code: Inconsolata
+    # code: Ubuntu Mono
+    # https://squidfunk.github.io/mkdocs-material/setup/changing-the-fonts/
+    # - https://fonts.google.com/specimen/Jost
+    # - https://fonts.google.com/specimen/Roboto+Mono
+
+  # https://squidfunk.github.io/mkdocs-material/setup/changing-the-colors/
+  palette:
+
+    # Palette toggle for automatic mode
+    - media: "(prefers-color-scheme)"
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to light mode
+
+    # Palette toggle for light mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: !ENV [MKDOCS_PRIMARY_COLOR, white] # white|black|...
+      accent: !ENV [MKDOCS_ACCENT_COLOR, custom]  # custom|black|'deep orange'|...
+      toggle:
+        icon: material/weather-night
+        name: Switch to dark mode
+
+    # Palette toggle for dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: black
+      accent: custom
+      toggle:
+        icon: material/brightness-4
+        name: Switch to system preference
+
+extra:
+  status:
+    new: Recently added
+    happy: This is awesome!
+    sad: Needs improvement
+    vscode: Best edited in VS Code
+    wip: Work in progress
+  social:
+    - icon: fontawesome/solid/home
+      link: https://stairwaytowonderland.github.io/mkdocs/
+    - icon: fontawesome/brands/github
+      link: https://github.com/stairwaytowonderland/mkdocs/tree/alt
+    - icon: fontawesome/brands/aws
+      link: https://stairwaytowonderland.awsapps.com/start
+    - icon: fontawesome/solid/globe
+      link: https://stairwaytowonderland.com
+
+  # Enable/disable "Made with Material for MKDocs" message in the footer
+  # generator: false
+
+extra_css:
+  - !ENV MKDOCS_CSS_PALETTE_PATH
+  - !ENV MKDOCS_CSS_EXTRA_PATH
+  ###############################################
+  # Core stylesheets (for core modifications)
+  ###############################################
+  - mkdocs/assets/stylesheets/core/font.min.css
+  - mkdocs/assets/stylesheets/core/display.min.css
+  - mkdocs/assets/stylesheets/core/content.min.css
+  - mkdocs/assets/stylesheets/core/fix.min.css
+  - mkdocs/assets/stylesheets/core/pdf.min.css
+
+#################################################
+# Plugins
+#################################################
+plugins:
+  - search:
+      separator: '[\s\u200b\-_,:!=\[\]()"`/]+|\.(?!\d)|&[lg]t;|(?!\b)(?=[A-Z][a-z])'
+
+  ###############################################
+  # NAVIGATION
+  ###############################################
+  # https://github.com/lukasgeiter/mkdocs-awesome-nav
+  # - awesome-nav:
+  #     filename: .nav.yml
+
+  # https://github.com/shu307/mkdocs-nav-weight
+  # Use in conjunction with same-dir to control navigation order
+  - mkdocs-nav-weight:
+      section_renamed: false
+      index_weight: -10
+      warning: true
+      reverse: false
+      headless_included: false
+      default_page_weight: 1000
+  ###############################################
+
+  # Use for Individual Docs Site setup (where docs are in the repo root)
+  # Disable if using awesome-nav
+  # https://github.com/oprypin/mkdocs-same-dir
+  - same-dir
+
+  - exclude:
+      glob:
+        - '.*/*' # Exclude hidden directories (starting with .)
+
+  # https://squidfunk.github.io/mkdocs-material/setup/setting-up-tags/
+  # https://squidfunk.github.io/mkdocs-material/plugins/tags/
+  - tags:
+      listings: true
+      listings_map:
+        scoped:
+          scope: true
+          exclude:
+            - Index
+            - Sample
+            - Info
+            - Draft
+
+  ###############################################
+  # Support for GitHub Callouts
+  ###############################################
+  # https://github.com/PGijsbers/admonitions
+  - gh-admonitions
+
+  # https://github.com/sondregronas/mkdocs-callouts
+  # Obsidian style support
+  - callouts
+
+  # https://github.com/mondeja/mkdocs-include-markdown-plugin
+  # Adds improved support for including markdown files (e.g. how the README.md is included on the index page)
+  #   - Needed to support GitHub style callouts in included md files
+  - include-markdown
+  ###############################################
+
+  # https://squidfunk.github.io/mkdocs-material/setup/adding-a-git-repository/
+  - git-revision-date-localized:
+      enable_creation_date: true
+
+  - minify:
+      minify_html: true
+      minify_css: true
+      css_files:
+        - mkdocs/assets/stylesheets/core/*.css
+
+  # https://github.com/blueswen/mkdocs-glightbox
+  - glightbox:
+      touchNavigation: true
+      loop: false
+      effect: zoom
+      zoomable: true
+      draggable: true
+
+  - autorefs
+
+  - git-authors
+
+  # https://squidfunk.github.io/mkdocs-material/plugins/meta/
+  - meta
+
+  # https://github.com/alanpt/mkdocs-pagelist-plugin
+  - pagelist
+
+  # https://github.com/mkdocstrings/mkdocstrings
+  - mkdocstrings
+
+  # https://github.com/fralau/mkdocs-mermaid2-plugin
+  - mermaid2
+
+  - page-to-pdf:
+      format: letter
+      disableOnServe: true
+      exclude:
+        - 'code-snippets/*'
+        - 'sample/*'
+        - 'tags.md'
+        - 'user-guide/authoring/mkdocs.md'
+
+#################################################
+# Extensions
+# https://facelessuser.github.io/pymdown-extensions/extensions
+#################################################
+markdown_extensions:
+  # - nl2br
+  # Tooltips
+  - abbr
+  # Admonitions
+  # https://squidfunk.github.io/mkdocs-material/reference/admonitions/#supported-types
+  - admonition
+  # Annotations, Buttons, Grids, Icons & Emojis, Images, Tooltips
+  - attr_list
+  # Definition Lists
+  - def_list
+  # Footnotes
+  - footnotes
+  # Annotations, Grids, Images
+  - md_in_html
+  # Data Tables
+  - tables
+  # Images
+  - pymdownx.blocks.caption
+  # Admonitions
+  - pymdownx.details
+  # Icons & Emojis
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+      # options:
+      #   custom_icons:
+      #     - overrides/.icons
+  # Code Blocks
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+      linenums: true
+      linenums_special: 1
+  - pymdownx.inlinehilite
+  - pymdownx.progressbar
+  # Table of Contents
+  - toc:
+      title: !ENV [MKDOCS_TOC_TITLE, 'Table of contents'] # (default: "Table of contents")
+      #permalink: true # Uses the default ¶ symbol
+      permalink: !ENV [MKDOCS_TOC_PERMALINK, '&sect;'] # Adds a clickable permalink to each section heading
+      separator: !ENV [MKDOCS_TOC_SEPARATOR, '-'] # (default: "-")
+      toc_depth: !ENV [MKDOCS_TOC_DEPTH, 6] # (default: 6)
+      # Adjust `baselevel` if top-level headings are h1 or h2
+      #   - Adjusting to 2 will cause title to be h1, top-level sections to be h2, etc.
+      baselevel: !ENV [MKDOCS_TOC_BASELEVEL, 1] # (default: 1)
+  # Content Tabs
+  - pymdownx.tabbed:
+      alternate_style: true
+      slugify: !!python/object/apply:pymdownx.slugs.slugify
+        kwds:
+          case: lower
+  # Task Lists
+  - pymdownx.tasklist:
+      custom_checkbox: true
+      clickable_checkbox: true
+  # Snippets
+  - pymdownx.snippets:
+      # base_path: [!relative $config_dir/.., !relative $docs_dir/code-snippets]
+      check_paths: true
+  # Admonitions, Annotations, Code Blocks, Content Tabs
+  # https://facelessuser.github.io/pymdown-extensions/extensions/superfences/#pygments-line-anchors-and-spans-markdown
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  # Formatting
+  - pymdownx.critic
+  - pymdownx.caret
+  - pymdownx.keys
+  - pymdownx.mark
+  - pymdownx.magiclink
+  - pymdownx.smartsymbols
+  - pymdownx.tilde
+  # https://python-markdown.github.io/extensions/smarty/
+  #   - Converts ASCII dashes, quotes and ellipses to their HTML entity equivalents
+  #   - Example: "..." becomes "…", "--" becomes "–", "---" becomes "—", straight quotes become curly quotes, etc.
+  - smarty
+
+#################################################
+# Navigation
+#################################################
+
+# If using mkdocs-awesome-nav, define navigation in the .nav.yml file(s)
+# Otherwise, define can navigation here with one caveat: None or all
+# nav:
+#   - "Home":
+#     - "Welcome": index.md

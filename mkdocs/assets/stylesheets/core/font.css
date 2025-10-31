@@ -1,0 +1,60 @@
+/* html {
+    font-size: 125%;
+}
+
+@media screen and (min-width: 100em) {
+    html {
+        font-size: 137.5%;
+    }
+} */
+
+.md-typeset h1
+,.md-typeset h2
+,.md-typeset h3
+,.md-typeset h4
+,.md-typeset h5
+,.md-typeset h6
+{
+    font-weight: bold;
+}
+
+@media screen and (min-width: 60em) {
+    /* .md-nav--secondary > .md-nav__list > .md-nav__item .md-nav__link, */
+    /* .md-nav--secondary > .md-nav__list > .md-nav__item .md-nav__link:has(+ .md-nav), */
+    /* .md-nav--secondary > .md-nav__list > .md-nav__item:first-child > .md-nav__link, */
+    /* .md-nav--secondary > .md-nav__list > .md-nav__item:last-child > .md-nav__link, */
+    .md-nav--primary > .md-nav__list > .md-nav__item > .md-nav__link {
+        font-weight: bold;
+    }
+
+    .md-nav--secondary > .md-nav__list > .md-nav__item .md-nav .md-nav__link {
+        font-weight: normal;
+        font-size: .67rem;
+    }
+
+    /* .md-typeset h1:first-of-type,
+    .md-typeset h1:last-of-type {
+        margin-bottom: 1rem;
+    } */
+}
+
+/*
+ * Font Reductions -- should be applied for certain font families
+ */
+
+/* .md-nav--secondary > .md-nav__list,
+.md-nav--secondary > .md-nav__list .md-nav, */
+/* .md-nav--primary > .md-nav__list,
+.md-nav--primary > .md-nav__list .md-nav {
+    font-size: .80rem;
+}
+
+.md-nav--secondary > .md-nav__list,
+.md-nav--secondary > .md-nav__list .md-nav {
+    font-size: .76rem;
+} */
+
+/* .md-nav--secondary > .md-nav__list,
+.md-nav--secondary > .md-nav__list .md-nav {
+    font-size: .65rem;
+} */

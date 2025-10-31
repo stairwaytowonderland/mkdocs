@@ -1,0 +1,119 @@
+# https://github.com/terraform-docs/terraform-docs
+# https://terraform-docs.io/user-guide/configuration/
+
+formatter: "markdown table" # this is required
+
+header-from: main.tf
+footer-from: ""
+
+recursive:
+  enabled: false
+  path: modules
+  include-main: true
+
+sections:
+  hide: []
+  show: []
+
+# (templates) https://github.com/terraform-docs/terraform-docs/blob/master/format/templates/markdown_table_inputs.tmpl
+# (builtinFuncs) https://github.com/terraform-docs/terraform-docs/blob/master/template/template.go
+content: ""
+
+# content-custom is not a real setting.
+# a fake settings is used to provide an alternative template
+# if you want to use it, swap 'content' with 'content-custom' above
+content-custom: |-
+  {{ .Header }}
+
+  ## Usage
+
+  ### Basic Usage
+
+  Basic usage with all inputs:
+
+  ```hcl
+  module "example" {
+    source = "<module-path>"
+  {{- if .Module.RequiredInputs }}
+
+    # Required variables
+  {{- range .Module.RequiredInputs }}
+    {{ .Name }} = {{ .GetValue }}
+  {{- end }}
+  {{- end }}
+  {{- if .Module.OptionalInputs }}
+
+    # Optional variables
+  {{- range .Module.OptionalInputs }}
+    {{ .Name }} = {{ .GetValue | printf "%s" }}
+  {{- end }}
+  {{- end }}
+  }
+  ```
+
+  ### Examples
+
+  **Additional examples usage examples can be found in the [*examples*](./examples) folder.**
+
+  {{ .Modules }}
+
+  {{ .Resources }}
+
+  ## Required Inputs
+
+  | Name | Description | Type |
+  |------|-------------|------|
+  {{- range .Module.Inputs }}
+  {{- if not .HasDefault }}
+    | <a name="{{ printf "input_%s" .Name }}"></a> [{{ printf "%s" (name .Name) }}](#{{ printf "input_%s" .Name | name }}) | {{ tostring .Description | sanitizeMarkdownTbl }} | `{{ tostring .Type }}` |
+  {{- end }}
+  {{- end }}
+
+  ## Optional Inputs
+
+  | Name | Description | Type | Default |
+  |------|-------------|------|:-------:|
+  {{- range .Module.Inputs }}
+  {{- if .HasDefault }}
+    | {{ anchorNameMarkdown "input" .Name }} | {{ tostring .Description | sanitizeMarkdownTbl }} | `{{ tostring .Type }}` | `{{ .GetValue | sanitizeMarkdownTbl }}` |
+  {{- end }}
+  {{- end }}
+
+  {{ .Outputs }}
+
+  {{ .Requirements }}
+
+output:
+  file: ""
+  mode: inject
+  template: |-
+    <!-- BEGIN_TF_DOCS -->
+    {{ .Content }}
+    <!-- END_TF_DOCS -->
+  # template: |-
+  #   <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
+  #   {{ .Content }}
+  #   <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
+
+output-values:
+  enabled: false
+  from: ""
+
+sort:
+  enabled: false
+  by: required
+
+settings:
+  anchor: true
+  color: true
+  default: true
+  description: false
+  escape: true
+  # hide-empty: false
+  html: false
+  indent: 2
+  lockfile: true
+  read-comments: true
+  required: true
+  sensitive: true
+  type: true

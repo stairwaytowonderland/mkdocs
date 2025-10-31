@@ -1,0 +1,46 @@
+name: Release
+
+# Ref: https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax#filter-pattern-cheat-sheet
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'docs/**'
+      - 'mkdocs/**'
+      - 'README.md'
+  workflow_call:
+    secrets:
+      token:
+        description: 'GitHub token with repo permissions to create releases'
+        required: true
+
+permissions:
+  contents: write
+#   issues: write
+#   pull-requests: write
+
+jobs:
+  release:
+    name: Create Release
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+          # Use PAT instead of GITHUB_TOKEN to cause semantic-release to trigger tag pipeline when tag is created.
+          # 'Fine-grained token' repo permissions: Contents
+          token: ${{ secrets.token || secrets.GH_PAT }}
+
+      - name: Run semantic release
+        uses: ./.github/actions/semantic-release
+        with:
+          # Use PAT instead of GITHUB_TOKEN to cause semantic-release to trigger tag pipeline when tag is created.
+          # 'Fine-grained token' repo permissions: Contents
+          github-token: ${{ secrets.token || secrets.GH_PAT }}
+          allow-initial-development-versions: true
+          force-bump-patch-version: false
+          changelog-generator-opt: "emojis=true"
+          prerelease: true
