@@ -20,17 +20,39 @@ test -f /.dockerenv || {
   exit 1
 }
 
-# Handle Ctrl + C gracefully
-trap ctrl_c INT
+# Load environment variables from .env file if it exists
+if [ -f "${script_dir}/../.env" ]; then
+  set -a; . "${script_dir}/../.env"; set +a
+fi
 
-ctrl_c () {
+# Handle Ctrl + C gracefully
+trap __ctrl_c INT
+
+__message() {
+  label=""
+  if [ $# -gt 1 ] ; then
+    label=" $1"; shift
+  fi
+  printf "[%s]\033[1m%s\033[0m %s\n" "$(date +'%Y-%m-%d %H:%M:%S')" "$label" "$(echo $@)"
+}
+
+__err() {
+  prefix="ERROR"
+  label=""
+  if [ $# -gt 1 ] ; then
+    label=" ${1%:}:"; shift
+  fi
+  printf "[%s] \033[91;1m%s\033[0m\033[91m%s\033[0m \033[91m%s\033[0m\n" "$(date +'%Y-%m-%d %H:%M:%S')" "$prefix" "$label" "$(echo $@)"
+}
+
+__ctrl_c () {
   code="$?"
-  printf "[%s] Ctrl + C happened\n" "$(date +'%Y-%m-%d %H:%M:%S')"
+  __err "\`Ctrl + C\` happened ..."
   test $code -gt 1 || code=0
   if [ $code -eq 0 ] ; then
-    printf "[%s] Shutting down gracefully ...\n" "$(date +'%Y-%m-%d %H:%M:%S')"
+    __message "Shutting down gracefully ..."
   else
-    printf "[%s] Exiting with error code %d ...\n" "$(date +'%Y-%m-%d %H:%M:%S')" "$code"
+    __message "Exiting with error code" "$code ..."
   fi
   exit $code
 }
@@ -39,25 +61,25 @@ ctrl_c () {
 ## Main functions
 ################################################
 
-cd /root
+# Change to home directory
+cd "${HOME:-/root}" || {
+  __err "Cannot change directory to" "${HOME:-/root}"
+  exit 1
+}
 
 PORT="${PORT:-8000}"
 
-if [ -f "${script_dir}/../.env" ]; then
-  set -a; . "${script_dir}/../.env"; set +a
-fi
-
-usage () {
-  code="${1:-1}"
+__usage() {
+  code="${1:-$?}"
   printf "Usage: %s [--venv-dir VENV_DIR] [--port PORT] [MKDOCS_OPTIONS]\n" "$0"
   printf "\t--venv-dir VENV_DIR  Specify the virtual environment directory\n"
   printf "\t--port PORT          Specify the port to use (default: %d)\n" "${PORT}"
-  printf "\tMKDOCS_OPTIONS       Additional options to pass to 'mkdocs serve'\n"
-  printf "\n\tExample: %s --venv-dir .venv-docker --port 8000 --open\n" "$0"
+  printf "\tMKDOCS_OPTIONS       Additional options to pass to 'mkdocs serve' or 'mkdocs build'\n"
+  printf "\n\tExample: %s %s --venv-dir .venv-docker --port 8000 --open\n" "$0" "serve"
   exit $code
 }
 
-use_venv () {
+__use_venv() {
   local venv_dir="$1"
   if [ -n "${venv_dir}" ] ; then
     python -m venv "${venv_dir}"
@@ -65,71 +87,88 @@ use_venv () {
   fi
 }
 
-install () {
-  pip install --root-user-action=ignore --no-cache-dir -r mkdocs/requirements.txt
+__install() {
+  echo
+  __message "Installing dependencies ..." ""
+  (set -x; pip install --root-user-action=ignore --no-cache-dir -r mkdocs/requirements.txt)
 }
 
-run_serve () {
-  (set -x; mkdocs serve -f mkdocs/mkdocs.yml --dev-addr="0.0.0.0:${PORT}" --livereload "$@")
+__run_serve() {
+  echo
+  __message "Starting \`mkdocs serve ...\`" ""
+  # if [ $# -gt 0 ] ; then
+  #   __message "Starting \`mkdocs serve ...\` with additional options:" "$@"
+  # else
+  #   __message "Starting \`mkdocs serve ...\`" ""
+  # fi
+  if [ $# -gt 0 ] ; then
+    __message "  additional option(s):" "$@"
+  fi
+  (set -x; exec mkdocs serve -f mkdocs/mkdocs.yml --dev-addr="0.0.0.0:${PORT}" --livereload "$@")
 }
 
-run_build () {
-  (set -x; mkdocs build -f mkdocs/mkdocs.yml "$@")
+__run_build() {
+  echo
+  __message "Running \`mkdocs build ...\`" ""
+  (set -x; exec mkdocs build -f mkdocs/mkdocs.yml "$@")
 }
 
-init() {
-  git config --system --add safe.directory /root/mkdocs/dist
+__init() {
+  echo
+  __message "Initializing git safe directory ..." ""
+  (set -x; git config --system --add safe.directory /root/mkdocs/dist)
 }
 
-serve () {
+serve() {
+  __init
   while [ $# -gt 0 ]; do
-    option="$1"; shift
-    case "$option" in
+    case "$1" in
       -d|--venv-dir)
-        use_venv "$1"; shift
+        __use_venv "$2"; shift 2
         ;;
       -p|--port)
-        port="$1"; shift
+        PORT="$2"; shift 2
         ;;
       -h|--help)
-        usage 0
+        __usage 0
         ;;
       *)
-        printf "Additional option: %s\n" "$@"
+        echo
+        __message "Additional option(s):" "$@"
         break
         ;;
     esac
   done
 
-  install
-  run_serve "$@"
+  __install
+  __run_serve "$@"
 }
 
-build () {
+build() {
+  __init
   while [ $# -gt 0 ]; do
-    option="$1"; shift
-    case "$option" in
+    case "$1" in
       -d|--venv-dir)
-        use_venv "$1"; shift
+        __use_venv "$2"; shift 2
         ;;
       -h|--help)
-        usage 0
+        __usage 0
         ;;
       *)
-        printf "Additional option: %s\n" "$@"
+        echo
+        __message "Additional option(s):" "$@"
         break
         ;;
     esac
   done
 
-  install
-  run_build "$@"
+  __install
+  __run_build "$@"
 }
 
-main () {
-  init
+main() {
   if [ $# -eq 0 ] ; then
-    usage
+    __usage 1
     return $?
   fi
   while [ $# -gt 0 ]; do
@@ -142,11 +181,12 @@ main () {
         build "$@"
         ;;
       -h|--help)
-        usage 0
+        __usage 0
         ;;
       *)
-        printf "Unknown option: %s\n" "$1"
-        usage 1
+        echo
+        __message "Unknown option:" "$option"
+        __usage 1
         ;;
     esac
   done
