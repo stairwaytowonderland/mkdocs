@@ -1,3 +1,5 @@
+<!--intro-start-->
+
 <div align="center" class="main-introduction center" markdown="1">
 
 # Docs Site Template :book:
@@ -95,3 +97,21 @@ _or simply just_:
 ```sh
 task serve
 ```
+
+<!--intro-end-->
+
+<!--conclusion-start-->
+
+---
+
+# Contributing :sparkles:
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for information on contributing to this project.
+
+---
+
+# License :card_index:
+
+This project © 2025 by [Andrew Haller](https://github.com/andrewhaller) is licensed under the [MIT License](https://opensource.org/license/mit). See the [LICENSE](LICENSE) file for details.
+
+<!--conclusion-end-->
