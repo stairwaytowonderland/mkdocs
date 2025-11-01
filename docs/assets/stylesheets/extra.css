@@ -156,6 +156,14 @@ body {
     }
 }
 
+@media print {
+    .main-introduction.center,
+    .main-introduction.center > h1 {
+        padding-left: 0;
+        text-align: left;
+    }
+}
+
 /* progress bar */
 .progress-label {
     font-weight: 700;
