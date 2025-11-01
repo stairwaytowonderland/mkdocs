@@ -74,7 +74,7 @@ tasks:
         else
           printf "\n%s\n" "{{.REPLACE}}" >> "{{.FILE}}"
         fi
-    silent: false
+    silent: true
 
   _insert_or_replace_dockerplatform:
     desc: "Insert or replace a line in a file"
@@ -95,7 +95,7 @@ tasks:
           DOCKER_PLATFORM="${DOCKER_DEFAULT_PLATFORM:-}"
           sed -i.bak '/{{.SEARCH}}/d' {{.FILE}} || true
         fi
-    silent: false
+    silent: true
 
   init:
     desc: "Initialize MKDocs environment"
@@ -252,7 +252,7 @@ tasks:
           set -a; . {{.USER_WORKING_DIR}}/.env; set +a
         fi
         com=(docker pull $DOCKER_PLATFORM squidfunk/mkdocs-material:latest)
-        echo -e "\n\033[32m${com[@]}\033[0m\n"
+        echo -e "\033[32m${com[@]}\033[0m\n"
         "${com[@]}"
     silent: true
     vars:
@@ -280,7 +280,7 @@ tasks:
         test -z "${DOCKER_PLATFORM}" || printf "\033[2m%s\033[0m\n" "Using Docker platform option: ${DOCKER_PLATFORM}"
         printf "\nENTRYPOINT: \033[1m%s\033[0m\nCOMMAND: \033[1m%s\033[0m\n" "${ENTRYPOINT}" "${COMMAND}"
         com=(docker run --rm -it ${DOCKER_PLATFORM} -p ${PORT:-8000}:${PORT:-8000} -v ${USER_WORKING_DIR}:/root -e PORT=${PORT:-8000} -e PIP_ROOT_USER_ACTION=ignore -e PYPPETEER_CHROMIUM_REVISION=${PYPPETEER_CHROMIUM_REVISION} --workdir /root --entrypoint ${ENTRYPOINT} squidfunk/mkdocs-material ${COMMAND} {{.CLI_ARGS}})
-        echo -e "\n\033[32m${com[@]}\033[0m\n"
+        echo -e "\n\033[32m${com[@]}\033[0m"
         "${com[@]}"
       - task: docker-clean-cache
     silent: true
@@ -307,7 +307,7 @@ tasks:
         test -z "${DOCKER_PLATFORM}" || printf "\033[2m%s\033[0m\n" "Using Docker platform option: ${DOCKER_PLATFORM}"
         printf "\nENTRYPOINT: \033[1m%s\033[0m\nCOMMAND: \033[1m%s\033[0m\n" "${ENTRYPOINT}" "${COMMAND}"
         com=(docker run --rm -it ${DOCKER_PLATFORM} -v ${USER_WORKING_DIR}:/root -e PIP_ROOT_USER_ACTION=ignore -e PYPPETEER_CHROMIUM_REVISION=${PYPPETEER_CHROMIUM_REVISION} --workdir /root --entrypoint ${ENTRYPOINT} squidfunk/mkdocs-material ${COMMAND} {{.CLI_ARGS}})
-        echo -e "\n\033[32m${com[@]}\033[0m\n"
+        echo -e "\n\033[32m${com[@]}\033[0m"
         "${com[@]}"
       - task: docker-clean-cache
     silent: true
