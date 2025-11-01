@@ -26,8 +26,8 @@ validation:
 # mkdocs/ branch of the repository
 # docs/ paths are relative to this directory
 # edit_uri: blob/main/docs/
-# MKDOCS_LOCAL_EDIT_URI="vscode://file/$(pwd)/docs"
-# MKDOCS_EDIT_URI="edit/mkdocs/docs/"
+# MKDOCS_LOCAL_EDIT_URI="vscode://file/$(pwd)"
+# MKDOCS_EDIT_URI="edit/mkdocs/"
 edit_uri: !ENV MKDOCS_EDIT_URI
 
 # TODO: Update copyright year automatically
@@ -52,6 +52,8 @@ use_directory_urls: false
 exclude_docs: |
   sample/*
   '!.*'
+  LICENSE.md
+  CONTRIBUTING.md
 
 #################################################
 # Theme Configuration

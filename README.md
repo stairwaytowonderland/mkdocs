@@ -1,3 +1,5 @@
+<!--intro-start-->
+
 <div align="center" class="main-introduction center" markdown="1">
 
 # Docs Site Template :book:
@@ -32,33 +34,52 @@ Examples of usage of this module can be found in the `examples` folder.
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
 
-The following requirements are needed by this module:
+| Name | Version |
+|------|---------|
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | ~> 1.3 |
+| <a name="requirement_aws"></a> [aws](#requirement\_aws) | ~> 6.0 |
 
-- <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) (~> 1.3)
+## Usage
 
-- <a name="requirement_aws"></a> [aws](#requirement\_aws) (~> 5.0)
+Basic usage of this module is as follows:
 
-## Modules
-
-No modules.
+```hcl
+module "example" {
+	source = "<module-path>"
+}
+```
 
 ## Resources
 
 No resources.
 
-## Required Inputs
+## Modules
 
-No required inputs.
+No modules.
 
-## Optional Inputs
+## Inputs
 
-No optional inputs.
+No inputs.
 
 ## Outputs
 
 No outputs.
 <!-- END_TF_DOCS -->
 
-## License and disclaimer
+<!--intro-end-->
 
-*Legal info here*
+<!--conclusion-start-->
+
+---
+
+# Contributing :sparkles:
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for information on contributing to this project.
+
+---
+
+# License :card_index:
+
+This project © 2025 by [Andrew Haller](https://github.com/andrewhaller) is licensed under the [MIT License](https://opensource.org/license/mit). See the [LICENSE](LICENSE) file for details.
+
+<!--conclusion-end-->

@@ -133,14 +133,13 @@ body {
     width: 25%;
 }
 
-
 .main-introduction.center {
     text-align: center;
     margin-left: auto;
     margin-right: auto;
 }
 
-.main-introduction.center > h1 {
+.main-introduction.center h1 {
     padding-left: 5rem;
 }
 
@@ -149,6 +148,14 @@ body {
 }
 
 @media screen and (max-width: 59.984375em) {
+    .main-introduction.center,
+    .main-introduction.center > h1 {
+        padding-left: 0;
+        text-align: left;
+    }
+}
+
+@media print {
     .main-introduction.center,
     .main-introduction.center > h1 {
         padding-left: 0;

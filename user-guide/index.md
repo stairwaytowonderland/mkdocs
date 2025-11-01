@@ -1,5 +1,6 @@
 ---
 icon: material/compass
+weight: 0
 tags:
   - Index
 hide:
