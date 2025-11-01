@@ -164,10 +164,3 @@ For more details, see the official [**MKDocs**](https://www.mkdocs.org/user-guid
     **Solution** :white_check_mark:
 
     Set [`use_directory_urls: false`](https://www.mkdocs.org/user-guide/configuration/#use_directory_urls) in the `mkdocs/mkdocs.yml` file
-
-{%
-    include-markdown "../README.md"
-    start="<!--conclusion-start-->"
-    end="<!--conclusion-end-->"
-    comments=true
-%}
