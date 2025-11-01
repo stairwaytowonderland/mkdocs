@@ -3,7 +3,7 @@ version: "3"
 dotenv: ['mkdocs/.env', '{{.ENV}}/.env', '{{.HOME}}/.env']
 
 env:
-  MKDOCS_LOCAL_EDIT_URI: 'vscode://file/{{.USER_WORKING_DIR}}/docs/'
+  LOCAL_EDIT_URI: 'vscode://file/{{.USER_WORKING_DIR}}/docs'
   DOCKER_LINUX_PLATFORM: '--platform linux/amd64'
 
   ###############################################
@@ -18,6 +18,8 @@ env:
   ###############################################
 
 vars:
+  MKDOCS_LOCAL_EDIT_URI: '{{.MKDOCS_LOCAL_EDIT_URI | default .LOCAL_EDIT_URI}}'
+
   DEFAULT_COLOR: '{{.MKDOCS_PRIMARY_COLOR | default "white"}}'
 
   USE_LINUX_PLATFORM: '{{.USE_LINUX_PLATFORM | default "false"}}'

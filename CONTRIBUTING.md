@@ -44,24 +44,24 @@ For more details on how to configure and use pre-commit, please refer to the off
 ### Commit Message Guidelines
 
 - Write clear, concise commit messages that follow the [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) standard.
-- The allowed tags for this project are the following:
+- The allowed [types](https://github.com/angular/angular/blob/22b96b9/CONTRIBUTING.md#type) for this project are the following:
 
-```
-[
-  "build",
-  "chore",
-  "ci",
-  "debug",
-  "docs",
-  "feat",
-  "fix",
-  "perf",
-  "refactor",
-  "remove",
-  "style",
-  "test"
-]
-```
+    ```yaml
+    [
+      "build",
+      "chore",
+      "ci",
+      "debug",
+      "docs",
+      "feat",
+      "fix",
+      "perf",
+      "refactor",
+      "remove",
+      "style",
+      "test"
+    ]
+    ```
 
 ## License and Attribution
 
