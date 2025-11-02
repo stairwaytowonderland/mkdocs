@@ -3,7 +3,7 @@ version: "3"
 dotenv: ['mkdocs/.env', '{{.ENV}}/.env', '{{.HOME}}/.env']
 
 env:
-  MKDOCS_LOCAL_EDIT_URI: 'vscode://file/{{.USER_WORKING_DIR}}/docs/'
+  LOCAL_EDIT_URI: 'vscode://file/{{.USER_WORKING_DIR}}/'
   DOCKER_LINUX_PLATFORM: '--platform linux/amd64'
 
   ###############################################
@@ -18,6 +18,8 @@ env:
   ###############################################
 
 vars:
+  MKDOCS_LOCAL_EDIT_URI: '{{.MKDOCS_LOCAL_EDIT_URI | default .LOCAL_EDIT_URI}}'
+
   DEFAULT_COLOR: '{{.MKDOCS_PRIMARY_COLOR | default "white"}}'
 
   USE_LINUX_PLATFORM: '{{.USE_LINUX_PLATFORM | default "false"}}'
@@ -145,7 +147,7 @@ tasks:
       - task: wait
       - |
         . {{.USER_WORKING_DIR}}/.venv/bin/activate
-        com=(mkdocs serve -f mkdocs/mkdocs.yml --dev-addr="127.0.0.1:${PORT}" --livereload {{.CLI_ARGS}})
+        com=(mkdocs serve -f mkdocs/mkdocs.yaml --dev-addr="127.0.0.1:${PORT}" --livereload {{.CLI_ARGS}})
         echo -e "\n\033[32m${com[@]}\033[0m\n"
         "${com[@]}"
     silent: true
@@ -181,7 +183,7 @@ tasks:
       - task: wait
       - |
         . {{.USER_WORKING_DIR}}/.venv/bin/activate
-        com=(mkdocs build -f mkdocs/mkdocs.yml --clean {{.CLI_ARGS}})
+        com=(mkdocs build -f mkdocs/mkdocs.yaml --clean {{.CLI_ARGS}})
         echo -e "\n\033[32m${com[@]}\033[0m\n"
         "${com[@]}"
     silent: true

@@ -1,17 +1,68 @@
+default_install_hook_types:
+  - pre-commit
+  - commit-msg
+
 repos:
-- repo: https://github.com/antonbabenko/pre-commit-terraform
-  rev: v1.100.0 # Get the latest from: https://github.com/antonbabenko/pre-commit-terraform/releases
-  hooks:
-    - id: terraform_fmt
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-added-large-files
+      - id: check-json
+      - id: check-yaml
+        # https://github.com/pre-commit/pre-commit-hooks?tab=readme-ov-file#check-yaml
+        # --allow-multiple-documents: allow yaml files which use the multi-document syntax
+        # --unsafe: Instead of loading the files, simply parse them for syntax
+        args: [--allow-multiple-documents, --unsafe]
+      - id: check-merge-conflict
+      # - id: no-commit-to-branch
+      #   args: [--branch, main]
 
-    - id: terraform_validate
+  - repo: https://github.com/compilerla/conventional-pre-commit
+    rev: v4.0.0
+    hooks:
+      - id: conventional-pre-commit
+        args: [types, feat,fix,docs,style,refactor,perf,test,build,ci,chore,revert]
 
-    - id: terraform_docs
-      args:
-        - --args=document
-        - --args=--sort=false
-        - --args=--hide providers
+  - repo: https://github.com/antonbabenko/pre-commit-terraform
+    rev: v1.100.0 # Get the latest from: https://github.com/antonbabenko/pre-commit-terraform/releases
+    hooks:
+      - id: terraform_fmt
 
-    - id: terraform_tflint
-      exclude: ^(?:.*/)?examples/
+      - id: terraform_validate
 
+      # - id: terraform_docs
+      #   args:
+      #     - --args=document
+      #     - --args=--sort=false
+      #     - --args=--hide providers
+
+      - id: terraform_tflint
+        exclude: ^(?:.*/)?examples/
+
+  - repo: https://github.com/terraform-docs/terraform-docs
+    rev: "v0.20.0"
+    hooks:
+      - id: terraform-docs-go
+        args: ["markdown", "table", "--config", ".terraform-docs.yaml", "."]
+        # files: "^(?!.*\\.md$)" # Exclude markdown files from being processed by terraform-docs if they are the output
+
+  - repo: https://github.com/psf/black
+    rev: 25.1.0
+    hooks:
+      - id: black
+        name: black
+        args: [src,--line-length=88]
+
+  # - repo: local
+  #   hooks:
+  #     - id: isort
+  #       name: isort
+  #       entry: isort .
+  #       language: python
+
+  #     - id: autoflake
+  #       name: autoflake
+  #       entry: autoflake --in-place --remove-all-unused-imports --remove-unused-variables .
+  #       language: python

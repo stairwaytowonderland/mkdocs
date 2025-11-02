@@ -26,8 +26,8 @@ validation:
 # mkdocs/ branch of the repository
 # docs/ paths are relative to this directory
 # edit_uri: blob/main/docs/
-# MKDOCS_LOCAL_EDIT_URI="vscode://file/$(pwd)/docs"
-# MKDOCS_EDIT_URI="edit/mkdocs/docs/"
+# MKDOCS_LOCAL_EDIT_URI="vscode://file/$(pwd)"
+# MKDOCS_EDIT_URI="edit/mkdocs/"
 edit_uri: !ENV MKDOCS_EDIT_URI
 
 # TODO: Update copyright year automatically
@@ -52,6 +52,8 @@ use_directory_urls: false
 exclude_docs: |
   sample/*
   '!.*'
+  LICENSE.md
+  CONTRIBUTING.md
 
 #################################################
 # Theme Configuration
@@ -59,6 +61,7 @@ exclude_docs: |
 theme:
   name: material
   custom_dir: overrides
+  language: !ENV [MKDOCS_DEFAULT_LANGUAGE, en]
   features:
     # - header.autohide
     # https://squidfunk.github.io/mkdocs-material/reference/tooltips/
@@ -181,7 +184,7 @@ extra:
       link: https://stairwaytowonderland.com
 
   # Enable/disable "Made with Material for MKDocs" message in the footer
-  # generator: false
+  generator: !ENV [MKDOCS_GENERATOR_ENABLED, true]
 
 extra_css:
   - !ENV MKDOCS_CSS_PALETTE_PATH
@@ -201,13 +204,7 @@ extra_css:
 plugins:
   - search:
       separator: '[\s\u200b\-_,:!=\[\]()"`/]+|\.(?!\d)|&[lg]t;|(?!\b)(?=[A-Z][a-z])'
-
-  ###############################################
-  # NAVIGATION
-  ###############################################
-  # https://github.com/lukasgeiter/mkdocs-awesome-nav
-  # - awesome-nav:
-  #     filename: .nav.yml
+      lang: [!ENV [MKDOCS_DEFAULT_LANGUAGE, en]]
 
   # https://github.com/shu307/mkdocs-nav-weight
   # Use in conjunction with same-dir to control navigation order
@@ -218,7 +215,10 @@ plugins:
       reverse: false
       headless_included: false
       default_page_weight: 1000
-  ###############################################
+
+  # https://squidfunk.github.io/mkdocs-material/plugins/meta/
+  - meta:
+      meta_file: !ENV [MKDOCS_META_FILE, 'meta.yml']
 
   # Use for Individual Docs Site setup (where docs are in the repo root)
   # Disable if using awesome-nav
@@ -258,6 +258,17 @@ plugins:
   - include-markdown
   ###############################################
 
+  # https://github.com/alanpt/mkdocs-pagelist-plugin
+  - pagelist
+  # https://github.com/mkdocstrings/mkdocstrings
+  - mkdocstrings
+  # https://github.com/fralau/mkdocs-mermaid2-plugin
+  - mermaid2
+  # https://github.com/mkdocstrings/autorefs
+  - autorefs
+  # https://github.com/timvink/mkdocs-git-authors-plugin
+  - git-authors
+
   # https://squidfunk.github.io/mkdocs-material/setup/adding-a-git-repository/
   - git-revision-date-localized:
       enable_creation_date: true
@@ -275,22 +286,6 @@ plugins:
       effect: zoom
       zoomable: true
       draggable: true
-
-  - autorefs
-
-  - git-authors
-
-  # https://squidfunk.github.io/mkdocs-material/plugins/meta/
-  - meta
-
-  # https://github.com/alanpt/mkdocs-pagelist-plugin
-  - pagelist
-
-  # https://github.com/mkdocstrings/mkdocstrings
-  - mkdocstrings
-
-  # https://github.com/fralau/mkdocs-mermaid2-plugin
-  - mermaid2
 
   - page-to-pdf:
       format: letter
@@ -364,7 +359,7 @@ markdown_extensions:
       clickable_checkbox: true
   # Snippets
   - pymdownx.snippets:
-      # base_path: [!relative $config_dir/.., !relative $docs_dir/code-snippets]
+      # base_path: [!relative $config_dir/.., !relative $docs_dir]
       check_paths: true
   # Admonitions, Annotations, Code Blocks, Content Tabs
   # https://facelessuser.github.io/pymdown-extensions/extensions/superfences/#pygments-line-anchors-and-spans-markdown

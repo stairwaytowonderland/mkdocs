@@ -50,7 +50,7 @@ And away we go ...
 <small>In most cases the `mkdocs serve` command also rebuilds all the necessary site files.</small>
 
 ```sh
-mkdocs serve -f mkdocs/mkdocs.yml
+mkdocs serve -f mkdocs/mkdocs.yaml
 ```
 
 ### Detailed Instructions
@@ -119,7 +119,7 @@ To **preview documentation** locally before pushing, follow the steps below.
     The `mkdocs build` will (re)generate the static site files in the `mkdocs/dist/` directory (*ignored from version control*).
 
     ```sh
-    mkdocs build -f mkdocs/mkdocs.yml
+    mkdocs build -f mkdocs/mkdocs.yaml
     ```
 
     > [!TIP]
@@ -128,7 +128,7 @@ To **preview documentation** locally before pushing, follow the steps below.
     > [!NOTE]
     > To fully clean and rebuild the site files, you can use `--clean` option:
         ```sh
-        mkdocs build -f mkdocs/mkdocs.yml --clean
+        mkdocs build -f mkdocs/mkdocs.yaml --clean
         ```
 
 4. **Serve the documentation locally**:
@@ -147,7 +147,7 @@ To **preview documentation** locally before pushing, follow the steps below.
         - Plugin options that are disabled on "*serve*" won't function in the same way as in GitHub Pages itself. For that, see *Option 2*.
 
         ```sh
-        mkdocs serve -f mkdocs/mkdocs.yml
+        mkdocs serve -f mkdocs/mkdocs.yaml
         ```
 
     1. **_Serving the static site directly using `python -m http.server`_**
@@ -177,7 +177,7 @@ For more details, see the official [**MKDocs**](https://www.mkdocs.org/user-guid
 
 ### MKDocs Limitations :warning:{ title="MkDocs Limitations, Workarounds, and Solutions" }
 
-- The [`awesome-nav`](https://github.com/lukasgeiter/mkdocs-awesome-nav) plugin supports certain dynamic navigation features that seem to not be fully compatible with the [`navigation.indexes`](https://squidfunk.github.io/mkdocs-material/setup/setting-up-navigation/#section-index-pages) theme feature (see mkdocs.yml). The incompatibility is made very apparent when using `python -m http.server` to run the site (locally). This limitation might result in the following unexpected behavior:
+- The [`awesome-nav`](https://github.com/lukasgeiter/mkdocs-awesome-nav) plugin supports certain dynamic navigation features that seem to not be fully compatible with the [`navigation.indexes`](https://squidfunk.github.io/mkdocs-material/setup/setting-up-navigation/#section-index-pages) theme feature (see mkdocs.yaml). The incompatibility is made very apparent when using `python -m http.server` to run the site (locally). This limitation might result in the following unexpected behavior:
 
     - A standard directory listing for certain sections
     - The `title:` meta being ignored
@@ -185,4 +185,4 @@ For more details, see the official [**MKDocs**](https://www.mkdocs.org/user-guid
 
     **Solution** :white_check_mark:
 
-    Set [`use_directory_urls: false`](https://www.mkdocs.org/user-guide/configuration/#use_directory_urls) in the `mkdocs/mkdocs.yml` file
+    Set [`use_directory_urls: false`](https://www.mkdocs.org/user-guide/configuration/#use_directory_urls) in the `mkdocs/mkdocs.yaml` file
