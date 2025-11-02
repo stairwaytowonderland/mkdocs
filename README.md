@@ -91,7 +91,7 @@ pip3 install -r mkdocs/requirements.txt
 ##### Step 3 - Serve
 
 ```sh
-mkdocs serve -f mkdocs/mkdocs.yml --livereload
+mkdocs serve -f mkdocs/mkdocs.yaml --livereload
 ```
 _or simply just_:
 ```sh

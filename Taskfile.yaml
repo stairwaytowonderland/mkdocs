@@ -147,7 +147,7 @@ tasks:
       - task: wait
       - |
         . {{.USER_WORKING_DIR}}/.venv/bin/activate
-        com=(mkdocs serve -f mkdocs/mkdocs.yml --dev-addr="127.0.0.1:${PORT}" --livereload {{.CLI_ARGS}})
+        com=(mkdocs serve -f mkdocs/mkdocs.yaml --dev-addr="127.0.0.1:${PORT}" --livereload {{.CLI_ARGS}})
         echo -e "\n\033[32m${com[@]}\033[0m\n"
         "${com[@]}"
     silent: true
@@ -183,7 +183,7 @@ tasks:
       - task: wait
       - |
         . {{.USER_WORKING_DIR}}/.venv/bin/activate
-        com=(mkdocs build -f mkdocs/mkdocs.yml --clean {{.CLI_ARGS}})
+        com=(mkdocs build -f mkdocs/mkdocs.yaml --clean {{.CLI_ARGS}})
         echo -e "\n\033[32m${com[@]}\033[0m\n"
         "${com[@]}"
     silent: true

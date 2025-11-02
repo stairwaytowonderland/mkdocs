@@ -104,13 +104,13 @@ __run_serve() {
   if [ $# -gt 0 ] ; then
     __message "  additional option(s):" "$@"
   fi
-  (set -x; exec mkdocs serve -f mkdocs/mkdocs.yml --dev-addr="0.0.0.0:${PORT}" --livereload "$@")
+  (set -x; exec mkdocs serve -f mkdocs/mkdocs.yaml --dev-addr="0.0.0.0:${PORT}" --livereload "$@")
 }
 
 __run_build() {
   echo
   __message "Running \`mkdocs build ...\`" ""
-  (set -x; exec mkdocs build -f mkdocs/mkdocs.yml "$@")
+  (set -x; exec mkdocs build -f mkdocs/mkdocs.yaml "$@")
 }
 
 __init() {
