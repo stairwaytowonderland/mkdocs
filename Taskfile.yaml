@@ -1,8 +1,10 @@
 version: "3"
 
-dotenv: ['mkdocs/.env', '{{.ENV}}/.env', '{{.HOME}}/.env']
+dotenv: ['{{.HOME}}/.env', '{{.USER_WORKING_DIR}}/mkdocs/.env']
 
 env:
+  BIN: '{{.USER_WORKING_DIR}}/mkdocs/bin'
+
   LOCAL_EDIT_URI: 'vscode://file/{{.USER_WORKING_DIR}}/docs'
   DOCKER_LINUX_PLATFORM: '--platform linux/amd64'
 
@@ -14,6 +16,7 @@ env:
   # Mac: https://commondatastorage.googleapis.com/chromium-browser-snapshots/index.html?prefix=Mac/1367869/
   PYPPETEER_CHROMIUM_REVISION_MAC: '1367869'
   # Linux_x64: https://commondatastorage.googleapis.com/chromium-browser-snapshots/index.html?prefix=Linux_x64/1181205/
+  # FIXME: Unable to find a stable linux revision (for docker)
   PYPPETEER_CHROMIUM_REVISION_LINUX: '1181205'
   ###############################################
 
@@ -24,6 +27,7 @@ vars:
 
   USE_LINUX_PLATFORM: '{{.USE_LINUX_PLATFORM | default "false"}}'
 
+  DOCKER_ADDR: '{{.DOCKER_ADDR | default "0.0.0.0"}}'
   PORT: '{{.PORT | default "8000"}}'
 
   DEBUG: '{{.DEBUG | default "false"}}'
@@ -35,7 +39,20 @@ tasks:
   default:
     desc: "Lists all available tasks"
     cmds:
+      - task: info
       - task --list
+
+  info:
+    desc: "Show task information"
+    cmds:
+      - |
+        echo "Current task: {{.TASK}}"
+        echo "Task directory: {{.TASK_DIR}}"
+        echo "Working directory {{.USER_WORKING_DIR}}"
+        echo "Root directory: {{.ROOT_DIR}}"
+        echo "OS: {{OS}}, Architecture: {{ARCH}}"
+        echo "CLI arguments: {{.CLI_ARGS}}"
+    silent: true
 
   debug:
     desc: "Debug environment variables"
@@ -91,7 +108,7 @@ tasks:
           touch {{.FILE}}
         fi
         if [ "{{.USE_LINUX_PLATFORM}}" = "true" ]; then
-          DOCKER_PLATFORM="${DOCKER_DEFAULT_PLATFORM:-${DOCKER_LINUX_PLATFORM}}"
+          DOCKER_PLATFORM="${DOCKER_LINUX_PLATFORM:-${DOCKER_DEFAULT_PLATFORM}}"
           grep -qF "{{.SEARCH}}" {{.FILE}} || printf "{{.SEARCH}}'%s'\n" "${DOCKER_PLATFORM}" >> {{.FILE}}
         else
           DOCKER_PLATFORM="${DOCKER_DEFAULT_PLATFORM:-}"
@@ -101,13 +118,15 @@ tasks:
 
   init:
     desc: "Initialize MKDocs environment"
+    # https://taskfile.dev/docs/guide#platform-specific-tasks-and-commands
+    # platforms: [darwin]
     cmds:
       - python3 -m venv {{.USER_WORKING_DIR}}/.venv
       - task: _insert_or_replace_pyppeteer
         vars:
-          FILE: '{{.USER_WORKING_DIR}}/.venv/bin/activate'
-          SEARCH: 'export PYPPETEER_CHROMIUM_REVISION='
-          REPLACE: "export PYPPETEER_CHROMIUM_REVISION='${PYPPETEER_CHROMIUM_REVISION}'"
+          FILE: '{{.USER_WORKING_DIR}}/.env'
+          SEARCH: 'PYPPETEER_CHROMIUM_REVISION='
+          REPLACE: "PYPPETEER_CHROMIUM_REVISION='${PYPPETEER_CHROMIUM_REVISION}'"
           TARGET_OS: '{{.USER_OS}}'
           PYPPETEER_CHROMIUM_REVISION: '{{.PYPPETEER_CHROMIUM_REVISION | default .PYPPETEER_CHROMIUM_REVISION_MAC}}'
       - |
@@ -138,19 +157,18 @@ tasks:
     deps:
       - init
     env:
+      WORKING_DIR: '{{.USER_WORKING_DIR}}'
       MKDOCS_PRIMARY_COLOR: '{{.COLOR}}'
       MKDOCS_EDIT_URI: '{{.MKDOCS_LOCAL_EDIT_URI | default .MKDOCS_EDIT_URI}}'
-      PORT: '{{.PORT}}'
+      MKDOCS_SERVE_PORT: '{{.PORT}}'
     cmds:
       - task: debug
         silent: true
       - task: wait
       - |
         . {{.USER_WORKING_DIR}}/.venv/bin/activate
-        com=(mkdocs serve -f mkdocs/mkdocs.yaml --dev-addr="127.0.0.1:${PORT}" --livereload {{.CLI_ARGS}})
-        echo -e "\n\033[32m${com[@]}\033[0m\n"
-        "${com[@]}"
-    silent: true
+        (set -x; mkdocs/bin/mkdocs.sh serve -f mkdocs/mkdocs.yaml {{.CLI_ARGS}})
+    silent: false
     vars:
       COLOR: '{{ .COLOR | default .DEFAULT_COLOR }}'
 
@@ -175,6 +193,8 @@ tasks:
     deps:
       - init
     env:
+      WORKING_DIR: '{{.USER_WORKING_DIR}}'
+      MKDOCS_SERVE_PORT: '{{.PORT}}'
       MKDOCS_PRIMARY_COLOR: '{{.COLOR}}'
       MKDOCS_EDIT_URI: '{{.MKDOCS_LOCAL_EDIT_URI | default .MKDOCS_EDIT_URI}}'
     cmds:
@@ -183,10 +203,8 @@ tasks:
       - task: wait
       - |
         . {{.USER_WORKING_DIR}}/.venv/bin/activate
-        com=(mkdocs build -f mkdocs/mkdocs.yaml --clean {{.CLI_ARGS}})
-        echo -e "\n\033[32m${com[@]}\033[0m\n"
-        "${com[@]}"
-    silent: true
+        (set -x; mkdocs/bin/mkdocs.sh build -f mkdocs/mkdocs.yaml {{.CLI_ARGS}})
+    silent: false
     vars:
       COLOR: '{{ .COLOR | default .DEFAULT_COLOR }}'
 
@@ -211,10 +229,10 @@ tasks:
     deps:
       - '{{if eq .MKDOCS_PRIMARY_COLOR "black"}}build-dark{{else}}build{{end}}'
     env:
-      PORT: '{{.PORT}}'
+      PORT: '{{.PORT | default "8000"}}'
     cmds:
       - |
-        com=(python3 -m http.server ${PORT:-8000} --directory mkdocs/dist {{.CLI_ARGS}})
+        com=(python3 -m http.server ${PORT} --directory mkdocs/dist {{.CLI_ARGS}})
         echo -e "\n\033[32m${com[@]}\033[0m\n"
         "${com[@]}"
     silent: true
@@ -249,13 +267,13 @@ tasks:
           REPLACE: "PYPPETEER_CHROMIUM_REVISION='${PYPPETEER_CHROMIUM_REVISION}'"
           TARGET_OS: '{{.DOCKER_OS}}'
           PYPPETEER_CHROMIUM_REVISION: '{{.PYPPETEER_CHROMIUM_REVISION | default .PYPPETEER_CHROMIUM_REVISION_LINUX}}'
-      - |
-        if [ -f {{.USER_WORKING_DIR}}/.env ]; then
-          set -a; . {{.USER_WORKING_DIR}}/.env; set +a
-        fi
-        com=(docker pull $DOCKER_PLATFORM squidfunk/mkdocs-material:latest)
-        echo -e "\033[32m${com[@]}\033[0m\n"
-        "${com[@]}"
+      # - |
+      #   if [ -f {{.USER_WORKING_DIR}}/.env ]; then
+      #     set -a; . {{.USER_WORKING_DIR}}/.env; set +a
+      #   fi
+      #   com=(docker pull $DOCKER_PLATFORM squidfunk/mkdocs-material:latest)
+      #   echo -e "\033[32m${com[@]}\033[0m\n"
+      #   "${com[@]}"
     silent: true
     vars:
       DOCKER_OS: '{{.DOCKER_OS | default "Linux_x64"}}'
@@ -265,23 +283,31 @@ tasks:
     deps:
       - docker-init
     env:
-      PORT: '{{.PORT}}'
-      USER_WORKING_DIR: '{{.USER_WORKING_DIR}}'
+      MKDOCS_SERVE_ADDR: '{{.DOCKER_ADDR}}'
+      MKDOCS_SERVE_PORT: '{{.PORT}}'
+      WORKING_DIR: '{{.USER_WORKING_DIR}}'
       DOCKER_PLATFORM: '{{.LINUX_PLATFORM}}'
-      ENTRYPOINT: '/sbin/tini'
-      COMMAND: 'mkdocs/bin/mkdocs.sh serve'
+      ENTRYPOINT: '--init --entrypoint mkdocs/bin/mkdocs.sh' # '--entrypoint /sbin/tini'
+      COMMAND: 'serve'
+      ENVS:
+        sh: |
+          if [ -f {{.USER_WORKING_DIR}}/.env ]; then
+            set -a; . {{.USER_WORKING_DIR}}/.env; set +a
+          fi
+          printf "-e %s -e %s -e %s -e %s" \
+            "MKDOCS_SERVE_ADDR=${MKDOCS_SERVE_ADDR}" \
+            "MKDOCS_SERVE_PORT=${MKDOCS_SERVE_PORT}" \
+            "PIP_ROOT_USER_ACTION=ignore" \
+            "PYPPETEER_CHROMIUM_REVISION=${PYPPETEER_CHROMIUM_REVISION}"
     cmds:
       - task: debug
         silent: true
       - task: wait
       - |
-        if [ -f {{.USER_WORKING_DIR}}/.env ]; then
-          set -a; . {{.USER_WORKING_DIR}}/.env; set +a
-        fi
-        printf "\n\033[4m%s\033[0m\n" "Serving MKDocs site using Docker on port ${PORT:-8000}"
+        printf "\n\033[4m%s\033[0m\n" "Serving MKDocs site using Docker on port ${MKDOCS_SERVE_PORT}"
         test -z "${DOCKER_PLATFORM}" || printf "\033[2m%s\033[0m\n" "Using Docker platform option: ${DOCKER_PLATFORM}"
         printf "\nENTRYPOINT: \033[1m%s\033[0m\nCOMMAND: \033[1m%s\033[0m\n" "${ENTRYPOINT}" "${COMMAND}"
-        com=(docker run --rm -it ${DOCKER_PLATFORM} -p ${PORT:-8000}:${PORT:-8000} -v ${USER_WORKING_DIR}:/root -e PORT=${PORT:-8000} -e PIP_ROOT_USER_ACTION=ignore -e PYPPETEER_CHROMIUM_REVISION=${PYPPETEER_CHROMIUM_REVISION} --workdir /root --entrypoint ${ENTRYPOINT} squidfunk/mkdocs-material ${COMMAND} {{.CLI_ARGS}})
+        com=(docker run --rm -it --pull=always --name="mkdocs-serve-${MKDOCS_SERVE_PORT}" ${DOCKER_PLATFORM} -p ${MKDOCS_SERVE_PORT}:${MKDOCS_SERVE_PORT} -v ${WORKING_DIR}:/root $ENVS --workdir /root ${ENTRYPOINT} squidfunk/mkdocs-material ${COMMAND} {{.CLI_ARGS}})
         echo -e "\n\033[32m${com[@]}\033[0m"
         "${com[@]}"
       - task: docker-clean-cache
@@ -292,23 +318,28 @@ tasks:
     deps:
       - docker-init
     env:
-      PORT: '{{.PORT}}'
-      USER_WORKING_DIR: '{{.USER_WORKING_DIR}}'
+      MKDOCS_SERVE_PORT: '{{.PORT}}'
+      WORKING_DIR: '{{.USER_WORKING_DIR}}'
       DOCKER_PLATFORM: '{{.LINUX_PLATFORM}}'
-      ENTRYPOINT: '/sbin/tini'
-      COMMAND: 'mkdocs/bin/mkdocs.sh build'
+      ENTRYPOINT: '--init --entrypoint mkdocs/bin/mkdocs.sh' # '--entrypoint /sbin/tini'
+      COMMAND: 'build'
+      ENVS:
+        sh: |
+          if [ -f {{.USER_WORKING_DIR}}/.env ]; then
+            set -a; . {{.USER_WORKING_DIR}}/.env; set +a
+          fi
+          printf "-e %s -e %s" \
+            "PIP_ROOT_USER_ACTION=ignore" \
+            "PYPPETEER_CHROMIUM_REVISION=${PYPPETEER_CHROMIUM_REVISION}"
     cmds:
       - task: debug
         silent: true
       - task: wait
       - |
-        if [ -f {{.USER_WORKING_DIR}}/.env ]; then
-          set -a; . {{.USER_WORKING_DIR}}/.env; set +a
-        fi
         printf "\n\033[4m%s\033[0m\n" "Building MKDocs site using Docker"
         test -z "${DOCKER_PLATFORM}" || printf "\033[2m%s\033[0m\n" "Using Docker platform option: ${DOCKER_PLATFORM}"
         printf "\nENTRYPOINT: \033[1m%s\033[0m\nCOMMAND: \033[1m%s\033[0m\n" "${ENTRYPOINT}" "${COMMAND}"
-        com=(docker run --rm -it ${DOCKER_PLATFORM} -v ${USER_WORKING_DIR}:/root -e PIP_ROOT_USER_ACTION=ignore -e PYPPETEER_CHROMIUM_REVISION=${PYPPETEER_CHROMIUM_REVISION} --workdir /root --entrypoint ${ENTRYPOINT} squidfunk/mkdocs-material ${COMMAND} {{.CLI_ARGS}})
+        com=(docker run --rm -it --pull=always --name="mkdocs-build-${MKDOCS_SERVE_PORT}" ${DOCKER_PLATFORM} -v ${WORKING_DIR}:/root $ENVS --workdir /root ${ENTRYPOINT} squidfunk/mkdocs-material ${COMMAND} {{.CLI_ARGS}})
         echo -e "\n\033[32m${com[@]}\033[0m"
         "${com[@]}"
       - task: docker-clean-cache
@@ -326,16 +357,16 @@ tasks:
   docker-clean-cache:
     desc: "Clean Docker cache directories"
     cmds:
-      - (set -x; rm -rf .cache)
-      - (set -x; rm -rf .local)
+      - (set -x; rm -rf {{.USER_WORKING_DIR}}/.cache)
+      - (set -x; rm -rf {{.USER_WORKING_DIR}}/.local)
     silent: true
 
   docker-clean:
     desc: "Clean the directories created by Docker"
     cmds:
       - task: docker-clean-cache
-      - (set -x; rm -rf .venv-docker)
-      - (set -x; rm -rf .ash_history)
+      - (set -x; rm -rf {{.USER_WORKING_DIR}}/.venv-docker)
+      - (set -x; rm -rf {{.USER_WORKING_DIR}}/.ash_history)
     silent: true
 
   get-github-deployments:
