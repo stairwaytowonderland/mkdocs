@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # Set error handling
-set -eu
+set -euo pipefail
 
 ################################################
 ## Common functions

@@ -211,10 +211,10 @@ tasks:
     deps:
       - '{{if eq .MKDOCS_PRIMARY_COLOR "black"}}build-dark{{else}}build{{end}}'
     env:
-      PORT: '{{.PORT}}'
+      PORT: '{{.PORT | default "8000"}}'
     cmds:
       - |
-        com=(python3 -m http.server ${PORT:-8000} --directory mkdocs/dist {{.CLI_ARGS}})
+        com=(python3 -m http.server ${PORT} --directory mkdocs/dist {{.CLI_ARGS}})
         echo -e "\n\033[32m${com[@]}\033[0m\n"
         "${com[@]}"
     silent: true
@@ -249,13 +249,13 @@ tasks:
           REPLACE: "PYPPETEER_CHROMIUM_REVISION='${PYPPETEER_CHROMIUM_REVISION}'"
           TARGET_OS: '{{.DOCKER_OS}}'
           PYPPETEER_CHROMIUM_REVISION: '{{.PYPPETEER_CHROMIUM_REVISION | default .PYPPETEER_CHROMIUM_REVISION_LINUX}}'
-      - |
-        if [ -f {{.USER_WORKING_DIR}}/.env ]; then
-          set -a; . {{.USER_WORKING_DIR}}/.env; set +a
-        fi
-        com=(docker pull $DOCKER_PLATFORM squidfunk/mkdocs-material:latest)
-        echo -e "\033[32m${com[@]}\033[0m\n"
-        "${com[@]}"
+      # - |
+      #   if [ -f {{.USER_WORKING_DIR}}/.env ]; then
+      #     set -a; . {{.USER_WORKING_DIR}}/.env; set +a
+      #   fi
+      #   com=(docker pull $DOCKER_PLATFORM squidfunk/mkdocs-material:latest)
+      #   echo -e "\033[32m${com[@]}\033[0m\n"
+      #   "${com[@]}"
     silent: true
     vars:
       DOCKER_OS: '{{.DOCKER_OS | default "Linux_x64"}}'
@@ -268,8 +268,8 @@ tasks:
       PORT: '{{.PORT}}'
       USER_WORKING_DIR: '{{.USER_WORKING_DIR}}'
       DOCKER_PLATFORM: '{{.LINUX_PLATFORM}}'
-      ENTRYPOINT: '/sbin/tini'
-      COMMAND: 'mkdocs/bin/mkdocs.sh serve'
+      ENTRYPOINT: '--init --entrypoint mkdocs/bin/mkdocs.sh' # '--entrypoint /sbin/tini'
+      COMMAND: 'serve'
     cmds:
       - task: debug
         silent: true
@@ -278,10 +278,10 @@ tasks:
         if [ -f {{.USER_WORKING_DIR}}/.env ]; then
           set -a; . {{.USER_WORKING_DIR}}/.env; set +a
         fi
-        printf "\n\033[4m%s\033[0m\n" "Serving MKDocs site using Docker on port ${PORT:-8000}"
+        printf "\n\033[4m%s\033[0m\n" "Serving MKDocs site using Docker on port ${PORT}"
         test -z "${DOCKER_PLATFORM}" || printf "\033[2m%s\033[0m\n" "Using Docker platform option: ${DOCKER_PLATFORM}"
         printf "\nENTRYPOINT: \033[1m%s\033[0m\nCOMMAND: \033[1m%s\033[0m\n" "${ENTRYPOINT}" "${COMMAND}"
-        com=(docker run --rm -it ${DOCKER_PLATFORM} -p ${PORT:-8000}:${PORT:-8000} -v ${USER_WORKING_DIR}:/root -e PORT=${PORT:-8000} -e PIP_ROOT_USER_ACTION=ignore -e PYPPETEER_CHROMIUM_REVISION=${PYPPETEER_CHROMIUM_REVISION} --workdir /root --entrypoint ${ENTRYPOINT} squidfunk/mkdocs-material ${COMMAND} {{.CLI_ARGS}})
+        com=(docker run --rm -it --pull=always --name="mkdocs-serve-${PORT}" ${DOCKER_PLATFORM} -p ${PORT}:${PORT} -v ${USER_WORKING_DIR}:/root -e PORT=${PORT} -e PIP_ROOT_USER_ACTION=ignore -e PYPPETEER_CHROMIUM_REVISION=${PYPPETEER_CHROMIUM_REVISION} --workdir /root ${ENTRYPOINT} squidfunk/mkdocs-material ${COMMAND} {{.CLI_ARGS}})
         echo -e "\n\033[32m${com[@]}\033[0m"
         "${com[@]}"
       - task: docker-clean-cache
@@ -295,8 +295,8 @@ tasks:
       PORT: '{{.PORT}}'
       USER_WORKING_DIR: '{{.USER_WORKING_DIR}}'
       DOCKER_PLATFORM: '{{.LINUX_PLATFORM}}'
-      ENTRYPOINT: '/sbin/tini'
-      COMMAND: 'mkdocs/bin/mkdocs.sh build'
+      ENTRYPOINT: '--init --entrypoint mkdocs/bin/mkdocs.sh' # '--entrypoint /sbin/tini'
+      COMMAND: 'build'
     cmds:
       - task: debug
         silent: true
@@ -308,7 +308,7 @@ tasks:
         printf "\n\033[4m%s\033[0m\n" "Building MKDocs site using Docker"
         test -z "${DOCKER_PLATFORM}" || printf "\033[2m%s\033[0m\n" "Using Docker platform option: ${DOCKER_PLATFORM}"
         printf "\nENTRYPOINT: \033[1m%s\033[0m\nCOMMAND: \033[1m%s\033[0m\n" "${ENTRYPOINT}" "${COMMAND}"
-        com=(docker run --rm -it ${DOCKER_PLATFORM} -v ${USER_WORKING_DIR}:/root -e PIP_ROOT_USER_ACTION=ignore -e PYPPETEER_CHROMIUM_REVISION=${PYPPETEER_CHROMIUM_REVISION} --workdir /root --entrypoint ${ENTRYPOINT} squidfunk/mkdocs-material ${COMMAND} {{.CLI_ARGS}})
+        com=(docker run --rm -it --pull=always --name="mkdocs-build-${PORT}" ${DOCKER_PLATFORM} -v ${USER_WORKING_DIR}:/root -e PIP_ROOT_USER_ACTION=ignore -e PYPPETEER_CHROMIUM_REVISION=${PYPPETEER_CHROMIUM_REVISION} --workdir /root ${ENTRYPOINT} squidfunk/mkdocs-material ${COMMAND} {{.CLI_ARGS}})
         echo -e "\n\033[32m${com[@]}\033[0m"
         "${com[@]}"
       - task: docker-clean-cache
