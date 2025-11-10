@@ -1,0 +1,144 @@
+################################################
+## Standard logic (always include)
+################################################
+
+if [ -z "$0" ] ; then
+  echo "Cannot determine script path"
+  exit 1
+fi
+
+docker=false
+script_name="$0"
+__script_dir="$(cd "$(dirname "$script_name")" && pwd)"
+SCRIPT_DIR="${SCRIPT_DIR:-$__script_dir}"
+
+################################################
+## Common logic
+################################################
+
+DOCKER_ONLY="${DOCKER_ONLY:-false}"
+
+# Ensure the script is running inside a Docker container
+test -f /.dockerenv && docker=true || {
+  if [ "${DOCKER_ONLY}" = "true" ] ; then
+    echo "This script is intended to be run inside a Docker container." >&2
+    exit 1
+  fi
+}
+
+# Handle Ctrl + C gracefully
+trap __ctrl_c SIGINT TERM
+
+__upper() { printf '%s' "$1" | tr '[:lower:]' '[:upper:]'; }
+__lower() { printf '%s' "$1" | tr '[:upper:]' '[:lower:]'; }
+__is_func() {
+  test -n "$1" && test "$(command -v -- "$1")" = "$1" || return 2
+  test "$(command -V -- "$1")" != "$(unset -f -- "$1"; command -V -- "$1" 2>/dev/null)"
+}
+
+__ctrl_c () {
+  local code="$?"
+  __err "\`Ctrl + C\` happened ..."
+  test $code -gt 1 || code=0
+  if [ $code -eq 0 ] ; then
+    __warn "Shutting down gracefully ... " -- "($code)"
+  else
+    __message "Exiting with error code $code ..."
+  fi
+  ! __is_func __abort || __abort # __abort() { return 0; }
+  exit $code
+}
+
+__log() {
+  local argc="$#"
+  local script="$(basename -- "$0")"
+  local type="$(__upper "$1")"; shift
+  local group="$(__upper "$script")"
+  local timestamp="$(date +'%Y-%m-%d %H:%M:%S')"
+  local pattern="%s\t-  %s\t-  %s %s\n"
+  local out=1
+  local color=""
+
+  case "$type" in
+    INFO|INFORMATION) ;;
+    ERR|ERROR)
+      out=2
+      color="\033[0;31m"
+      ;;
+    WARN|WARNING)
+      color="\033[0;33m"
+      ;;
+    *)
+      printf "\033[31mUnknown log type: %s\033[0m\n" "$type" >&2
+      return 3
+    ;;
+  esac
+
+  local _label="[$timestamp]"
+  local label="$_label"
+  local msg=""
+
+  case "$type" in
+    *)
+      if [ $argc -gt 2 ] ; then
+        label="${1%:}"; shift
+        pattern="%s\t-  %s\t-  %s  - %s\n"
+      fi
+      if [ $argc -gt 3 ] ; then
+        pattern="%s\t-  %s\t-  %s %s\n"
+        if [ "$1" = "--" ] ; then
+          shift
+          msg="$label"
+          label="$_label"
+        fi
+      fi
+      test $argc -lt 3 || label="$(__upper "$label")"
+      ;;
+  esac
+
+  if [ -n "$color" ]; then
+    pattern="${color}${pattern}\033[0m"
+  fi
+
+  printf "$pattern" "$type" "$group" "$label" "$(echo $msg $@)" >&$out
+}
+
+__message() {
+  __log "info" "$@"
+}
+
+__warn() {
+  __log "warn" "$@"
+}
+
+__err() {
+  __log "error" "$@"
+}
+
+__gitsafe() {
+  local target="$1"
+  local operation="$(__lower "${2:-add}")"
+  local gitconfig="global"
+  # test $(! $docker) || gitconfig="system"
+  if $docker ; then gitconfig="system"; fi
+  gitconfig="$(__lower "${3:-$gitconfig}")"
+
+  case "$operation" in
+    add|set)
+      operation=add
+      ;;
+    unset|remove)
+      operation=unset
+      if $docker ; then
+        __message "Skipping git safe unsetting inside Docker ..."
+        return 0
+      fi
+      ;;
+    *)
+      __err "Invalid git safe operation:" "$operation"
+      return 3
+      ;;
+  esac
+
+  (set -x; git config "--${gitconfig}" "--${operation}" safe.directory "${target}")
+}
