@@ -153,7 +153,7 @@ body {
 }
 
 .main-introduction.center > h1 {
-    padding-left: 5rem;
+    padding-left: 6rem;
 }
 
 .main-introduction.center:has(+ .main-introduction.center) > h1 {
