@@ -66,6 +66,7 @@ body {
     text-decoration-thickness: 0.08em;
     text-decoration-color: var(--link-underline-default-color);
 }
+
 .md-main .md-typeset a:not([tabindex], .md-tag, .md-button, .headerlink):hover {
     text-decoration-color: var(--link-underline-hover-color);
 }
@@ -199,6 +200,8 @@ body {
     scale: 0 1;
 }
 
+.md-tabs > .md-grid > .md-tabs__list > .md-tabs__item.md-tabs__item--active > .md-tabs__link::after,
+.md-tabs > .md-grid > .md-tabs__list > .md-tabs__item > .md-tabs__link:focus-visible::after,
 .md-tabs > .md-grid > .md-tabs__list > .md-tabs__item > .md-tabs__link:hover::after {
     transform-origin: left;
     scale: 1 1
