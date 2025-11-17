@@ -1,0 +1,31 @@
+__use_venv() {
+  local venv_dir="$1"
+  if [ -n "${venv_dir}" ] ; then
+    __message "PYVENV" "Initializing virtual environment ..."
+    (set -x; python -m venv "${venv_dir}")
+    __message "PYVENV" "Activating virtual environment ..."
+    echo "+ . ${venv_dir}/bin/activate"
+    . "${venv_dir}/bin/activate"
+  fi
+}
+
+__check_venv() {
+  local script="${1:-$SCRIPT_DIR/venv.py}"
+  local code="${2-}"
+  local msg=""
+  if [ ! -r "${script}" ] ; then
+    set +e
+    __err "PYVENV" "No venv check script found: ${script}"
+    return 1
+  fi
+  set +e
+  if [ -z "$code" -o "${code:-99}" -ne 0 ] ; then
+    # if ! ${docker:-false} ; then
+    msg=$(${script} 2>&1)
+    code=$?
+    __message "PYVENV" "$msg"
+    # fi
+  fi
+  return $code
+  set -e
+}

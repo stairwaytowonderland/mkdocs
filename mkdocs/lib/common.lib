@@ -36,6 +36,14 @@ __is_func() {
   test "$(command -V -- "$1")" != "$(unset -f -- "$1"; command -V -- "$1" 2>/dev/null)"
 }
 
+__result() {
+  local code="$1"
+  case "$code" in
+    0|true|True|yes|Yes) return 0 ;;
+    *) return $code ;;
+  esac
+}
+
 __ctrl_c () {
   local code="$?"
   __err "\`Ctrl + C\` happened ..."

@@ -167,7 +167,7 @@ tasks:
       - task: wait
       - |
         . {{.USER_WORKING_DIR}}/.venv/bin/activate
-        (set -x; mkdocs/bin/mkdocs.sh serve -f mkdocs/mkdocs.yaml {{.CLI_ARGS}})
+        (set -x; mkdocs/bin/mkdocs.sh serve -f mkdocs/mkdocs.yaml --no-install {{.CLI_ARGS}})
     silent: false
     vars:
       COLOR: '{{ .COLOR | default .DEFAULT_COLOR }}'
@@ -203,7 +203,7 @@ tasks:
       - task: wait
       - |
         . {{.USER_WORKING_DIR}}/.venv/bin/activate
-        (set -x; mkdocs/bin/mkdocs.sh build -f mkdocs/mkdocs.yaml {{.CLI_ARGS}})
+        (set -x; mkdocs/bin/mkdocs.sh build -f mkdocs/mkdocs.yaml --no-install {{.CLI_ARGS}})
     silent: false
     vars:
       COLOR: '{{ .COLOR | default .DEFAULT_COLOR }}'

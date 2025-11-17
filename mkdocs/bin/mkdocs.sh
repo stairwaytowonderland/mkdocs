@@ -1,5 +1,7 @@
 #!/bin/sh
 
+# TODO: Add support for arg=value syntax
+
 ################################################
 ## Standard logic (always include)
 ################################################
@@ -23,6 +25,7 @@ SCRIPT_DIR="${SCRIPT_DIR:-$__script_dir}"
 
 # Load common functions and variables
 . "${SCRIPT_DIR}/../lib/common.lib"
+. "${SCRIPT_DIR}/../lib/pyvenv.lib"
 
 ################################################
 ## Main logic
@@ -30,6 +33,8 @@ SCRIPT_DIR="${SCRIPT_DIR:-$__script_dir}"
 
 __working_dir="$(cd "${SCRIPT_DIR}/../.." && pwd)"
 WORKING_DIR="${WORKING_DIR:-$__working_dir}"
+INSTALL=true
+VENV_DIR=""
 
 # Change to working directory
 cd "$WORKING_DIR" || {
@@ -81,19 +86,31 @@ EOF
   exit $code
 }
 
-__use_venv() {
-  local venv_dir="$1"
-  if [ -n "${venv_dir}" ] ; then
-    python -m venv "${venv_dir}"
-    . "${venv_dir}/bin/activate"
-  fi
-}
-
 __install() {
   echo
-  __message "Installing dependencies ..."
-  echo $WORKING_DIR
-  (set -x; pip install --root-user-action=ignore --no-cache-dir -r mkdocs/requirements.txt)
+  local pyvenv="${SCRIPT_DIR}/venv.py"
+  local venv_check=0
+  local is_venv=0
+  __message "PYVENV" "Checking virtual environment ..."
+
+  if [ "$docker" != "true" -o -n "${VENV_DIR}" ] ; then
+    __check_venv "$pyvenv"
+    venv_check=$?
+
+    __result "$venv_check"
+    is_venv=$?
+  fi
+
+  if ! __result "$is_venv" ; then
+    __use_venv "${VENV_DIR:-${WORKING_DIR}/.venv}"
+  fi
+
+  if test "$INSTALL" = "true" && __check_venv "$pyvenv" "$is_venv" ; then
+    echo
+    __message "Installing dependencies ..."
+    echo $WORKING_DIR
+    (set -x; pip install --root-user-action=ignore --no-cache-dir -r mkdocs/requirements.txt)
+  fi
 }
 
 __run_serve() {
@@ -124,7 +141,8 @@ serve() {
         shift 2
         ;;
       -d|--venv-dir)
-        __use_venv "$2"
+        VENV_DIR="$2"
+        # __use_venv "$2"
         shift 2
         ;;
       -f|--file)
@@ -137,6 +155,10 @@ serve() {
       -p|--port)
         MKDOCS_SERVE_PORT="$2"
         shift 2
+        ;;
+      --no-install)
+        INSTALL=false
+        shift
         ;;
       --)
         shift
@@ -161,7 +183,8 @@ build() {
   while [ $# -gt 0 ]; do
     case "$1" in
       -d|--venv-dir)
-        __use_venv "$2"
+        VENV_DIR="$2"
+        __use_venv "$VENV_DIR"
         shift 2
         ;;
       -f|--file)
@@ -170,6 +193,10 @@ build() {
         ;;
       -h|--help)
         __usage 0
+        ;;
+      --no-install)
+        INSTALL=false
+        shift
         ;;
       --)
         shift
