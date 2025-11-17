@@ -119,6 +119,7 @@ theme:
     # text: Oswald # Doesn't display "--" as long dash (workaround: use markdown_extensions.smarty); a little narrow
     ### Standard, Neutral, Professional
     # text: Roboto # Doesn't display "--" as long dash (workaround: use markdown_extensions.smarty)
+    # text: Inter  # Doesn't display "--" as long dash (workaround: use markdown_extensions.smarty)
     # text: Barlow # *Top Favorite: Displays "--" as long dash
     # text: News Cycle # Favorite: Displays "--" as long dash; except h3+ and italics a bit thin
     ### Modern, Clean, Bold
@@ -196,10 +197,8 @@ extra_css:
   ###############################################
   # Core stylesheets (for core modifications)
   ###############################################
-  - assets/stylesheets/core/font.min.css
-  - assets/stylesheets/core/display.min.css
   - assets/stylesheets/core/content.min.css
-  - assets/stylesheets/core/fix.min.css
+  - assets/stylesheets/core/nav.min.css
   - assets/stylesheets/core/pdf.min.css
 
 #################################################
