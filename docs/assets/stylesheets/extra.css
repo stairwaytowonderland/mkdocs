@@ -272,13 +272,13 @@ body {
 /* -------------------------------------------------------- */
 /* Underline links in main content and footer with animation */
 
-.md-content a:not(.main-introduction a, [tabindex], .highlighttable a, .md-tag, .md-button, .headerlink, .md-icon),
+.md-content a:not(.main-introduction a, [tabindex], .highlighttable a, .md-tag, .md-button, .headerlink, .md-icon, .glightbox),
 .md-footer a {
     position: relative;
     display: inline-block;
 }
 
-.md-content a:not(.main-introduction a, [tabindex], .highlighttable a, .md-tag, .md-button, .headerlink, .md-icon)::before,
+.md-content a:not(.main-introduction a, [tabindex], .highlighttable a, .md-tag, .md-button, .headerlink, .md-icon, .glightbox)::before,
 .md-footer a::before {
     content: "";
     display: block;
@@ -296,11 +296,11 @@ body {
     background-color: var(--md-footer-fg-color);
 }
 
-.md-content a:not(.main-introduction a, [tabindex], .highlighttable a, .md-tag, .md-button, .headerlink, .md-icon)::before {
+.md-content a:not(.main-introduction a, [tabindex], .highlighttable a, .md-tag, .md-button, .headerlink, .md-icon, .glightbox)::before {
     background-color: var(--md-typeset-a-color);
 }
 
-.md-content a:not(.main-introduction a, .admonition a, [tabindex], .highlighttable a, .md-tag, .md-button, .headerlink, .md-icon)::before {
+.md-content a:not(.main-introduction a, .admonition a, [tabindex], .highlighttable a, .md-tag, .md-button, .headerlink, .md-icon, .glightbox)::before {
     bottom: var(--link-underline-vertical-offset);
     height: var(--link-underline-default-thickness);
 }
@@ -310,26 +310,26 @@ body {
     height: 1px;
 }
 
-.md-content a:not(.main-introduction a, [tabindex], .highlighttable a, .md-tag, .md-button, .headerlink, .md-icon):hover::before,
-.md-content a:not(.main-introduction a, [tabindex], .highlighttable a, .md-tag, .md-button, .headerlink, .md-icon):focus::before,
+.md-content a:not(.main-introduction a, [tabindex], .highlighttable a, .md-tag, .md-button, .headerlink, .md-icon, .glightbox):hover::before,
+.md-content a:not(.main-introduction a, [tabindex], .highlighttable a, .md-tag, .md-button, .headerlink, .md-icon, .glightbox):focus::before,
 .md-footer a:hover::before,
 .md-footer a:focus::before {
     scale: 1 1;
     transform-origin: top;
 }
 
-.md-content a:not(.main-introduction a, [tabindex], .highlighttable a, .md-tag, .md-button, .headerlink, .md-icon):hover::before,
-.md-content a:not(.main-introduction a, [tabindex], .highlighttable a, .md-tag, .md-button, .headerlink, .md-icon):focus::before {
+.md-content a:not(.main-introduction a, [tabindex], .highlighttable a, .md-tag, .md-button, .headerlink, .md-icon, .glightbox):hover::before,
+.md-content a:not(.main-introduction a, [tabindex], .highlighttable a, .md-tag, .md-button, .headerlink, .md-icon, .glightbox):focus::before {
     background-color: var(--link-underline-hover-color);
 }
 
 @media screen and (max-width: 59.984375em) {
-    .md-main .md-typeset a:not(.main-introduction a, [tabindex], .highlighttable a, .md-tag, .md-button, .headerlink, .md-icon) {
+    .md-main .md-typeset a:not(.main-introduction a, [tabindex], .highlighttable a, .md-tag, .md-button, .headerlink, .md-icon, .glightbox) {
         text-underline-offset: calc((var(--link-underline-default-thickness) / 3) + 1px);
         text-decoration-thickness: calc((var(--link-underline-default-thickness) / 3) - 1px);
     }
 
-    .md-content a:not(.main-introduction a, [tabindex], .highlighttable a, .md-tag, .md-button, .headerlink, .md-icon)::before {
+    .md-content a:not(.main-introduction a, [tabindex], .highlighttable a, .md-tag, .md-button, .headerlink, .md-icon, .glightbox)::before {
         bottom: -1px;
         height: 1px;
     }
